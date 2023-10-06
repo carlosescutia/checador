@@ -58,4 +58,4 @@
 
         </nav>
 
-        <main role="main" class="container-fluid col-sm-12">
+        <main role="main" class="container-fluid ml-sm-auto px-4">
