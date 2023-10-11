@@ -11,9 +11,18 @@ class Asistencias_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function existe($data)
+    {
+        $sql = 'select cve_asistencia from asistencias where cve_empleado = ? and fecha = ? and hora = ? ';
+        $query = $this->db->query($sql, array($data['cve_empleado'], $data['fecha'], $data['hora']));
+        return $query->num_rows();
+    }
+
     public function guardar($data)
     {
-        $this->db->insert('asistencias', $data);
+        if ( !$this->existe($data) ) {
+            $this->db->insert('asistencias', $data);
+        }
     }
 
 }
