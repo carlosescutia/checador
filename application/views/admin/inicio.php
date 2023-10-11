@@ -2,13 +2,15 @@
         <h2>Inicio</h2>
     </div>
     <div class="row">
-        <div class="col-md-8">
-            <div class="col-md-12">
-                <?php include "bienvenida.php"; ?>
+        <div class="col-sm-5 offset-sm-1">
+            <div class="col-sm-12">
+                <?php include "indicadores_incidencias.php"; ?>
             </div>
         </div>
-        <div class="col-md-3 offset-sm-1 ml-5">
-            <img src="<?=base_url();?>img/documentos.jpg" class="img-fluid rounded">
+        <div class="col-sm-3 offset-sm-1">
+            <div class="col-sm-12">
+                <?php include "indicadores_empleados.php"; ?>
+            </div>
         </div>
     </div>
 
