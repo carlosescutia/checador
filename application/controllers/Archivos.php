@@ -16,7 +16,7 @@ class Archivos extends CI_Controller {
             $nombre_archivo = $this->input->post('nombre_archivo');
             $config = array();
             $config['upload_path'] = 'doc';
-            $config['allowed_types'] = 'csv';
+            $config['allowed_types'] = '*';
             $config['max_size'] = '10240';
             $config['overwrite'] = TRUE;
             $config['file_name'] = $nombre_archivo;
@@ -33,7 +33,7 @@ class Archivos extends CI_Controller {
                 $nom_organizacion = $this->session->userdata('nom_organizacion');
                 $entidad = 'archivos';
                 $valor = $nom_organizacion . $separador . $nombre_archivo;
-                $accion = 'adjuntó';
+                $accion = 'importó';
                 $data = array(
                     'fecha' => date("Y-m-d"),
                     'hora' => date("H:i"),
