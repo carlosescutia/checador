@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="desc_dia_inhabil" class="col-sm-2 col-form-label">Nombre</label>
+                <label for="desc_dia_inhabil" class="col-sm-2 col-form-label">Descripción</label>
                 <div class="col-sm-4">
                     <input type="text" class="form-control" name="desc_dia_inhabil" id="desc_dia_inhabil" value="<?=$dia_inhabil['desc_dia_inhabil'] ?>">
                 </div>
