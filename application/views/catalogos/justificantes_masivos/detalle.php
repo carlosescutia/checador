@@ -15,19 +15,19 @@
 
         <div class="col-md-12">
             <div class="form-group row">
-                <label for="fecha" class="col-sm-2 col-form-label">Fecha:</label>
+                <label for="fecha" class="col-sm-2 col-form-label">Fecha</label>
                 <div class="col-sm-2">
                     <input type="date" class="form-control" name="fecha" id="fecha" value="<?=$justificante_masivo['fecha'] ?>">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="desc_justificante_masivo" class="col-sm-2 col-form-label">Descripción:</label>
+                <label for="desc_justificante_masivo" class="col-sm-2 col-form-label">Descripción</label>
                 <div class="col-sm-4">
                     <input type="text" class="form-control" name="desc_justificante_masivo" id="desc_justificante_masivo" value="<?=$justificante_masivo['desc_justificante_masivo'] ?>">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="tipo" class="col-sm-2 col-form-label">Horario</label>
+                <label for="tipo" class="col-sm-2 col-form-label">Tipo</label>
                 <div class="col-sm-2">
                     <select class="form-select" name="tipo" id="tipo">
                         <option value="D" <?= ($justificante_masivo['tipo'] == 'D') ? 'selected' : '' ?> >Día</option>

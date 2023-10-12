@@ -28,7 +28,7 @@
             </div>
             <div class="form-group row">
                 <label for="tipo" class="col-sm-2 col-form-label">Tipo</label>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <select class="form-select" name="tipo" id="tipo">
                         <option value="D" >Día</option>
                         <option value="E" >Entrada</option>
