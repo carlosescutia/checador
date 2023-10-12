@@ -50,7 +50,7 @@ class Empleados extends CI_Controller {
 
             $this->load->view('templates/admheader', $data);
             $this->load->view('templates/dlg_borrar');
-            $this->load->view('empleados/lista', $data);
+            $this->load->view('catalogos/empleados/lista', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');
@@ -68,7 +68,7 @@ class Empleados extends CI_Controller {
             $data['horarios'] = $this->horarios_model->get_horarios();
 
             $this->load->view('templates/admheader', $data);
-            $this->load->view('empleados/detalle', $data);
+            $this->load->view('catalogos/empleados/detalle', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');
@@ -89,7 +89,7 @@ class Empleados extends CI_Controller {
             $data['horarios'] = $this->horarios_model->get_horarios();
 
             $this->load->view('templates/admheader', $data);
-            $this->load->view('empleados/nuevo', $data);
+            $this->load->view('catalogos/empleados/nuevo', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');

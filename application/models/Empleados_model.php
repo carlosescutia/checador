@@ -17,6 +17,18 @@ class Empleados_model extends CI_Model {
         return $query->row_array();
     }
 
+    public function get_num_empleados($activo) {
+        $sql = 'select count(*) as num_empleados from empleados';
+
+        $parametros = array();
+        if ($activo <> "") {
+            $sql .= ' where activo = ?';
+            array_push($parametros, "$activo");
+        } 
+        $query = $this->db->query($sql, $parametros);
+        return $query->row_array()['num_empleados'] ?? null ;
+    }
+
     public function guardar($data, $cve_empleado)
     {
         if ($cve_empleado) {
