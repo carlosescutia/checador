@@ -10,6 +10,7 @@
                     <?php include "organizaciones/boton.php" ?>
                 </div>
                 <div class="col-md-4">
+                    <?php include "empleados/boton.php" ?>
                 </div>
                 <div class="col-md-4">
                     <?php include "parametros_sistema/boton.php" ?>

@@ -9,6 +9,7 @@ class Admin extends CI_Controller {
         $this->load->model('opciones_sistema_model');
         $this->load->model('bitacora_model');
         $this->load->model('parametros_sistema_model');
+        $this->load->model('empleados_model');
     }
 
     public function get_userdata()
@@ -43,6 +44,9 @@ class Admin extends CI_Controller {
             $data = [];
             $data += $this->get_userdata();
             $data += $this->get_system_params();
+
+            $activo = "1";
+            $data['num_empleados'] = $this->empleados_model->get_num_empleados($activo);
 
             $this->load->view('templates/admheader', $data);
             $this->load->view('admin/inicio', $data);
