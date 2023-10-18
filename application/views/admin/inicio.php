@@ -2,12 +2,12 @@
         <h2>Inicio</h2>
     </div>
     <div class="row">
-        <div class="col-sm-5 offset-sm-1">
+        <div class="col-sm-7 offset-sm-1">
             <div class="col-sm-12">
-                <?php include "indicadores_incidencias.php"; ?>
+                <?php include "indicadores_incidentes.php"; ?>
             </div>
         </div>
-        <div class="col-sm-3 offset-sm-1">
+        <div class="col-sm-3 ">
             <div class="col-sm-12">
                 <?php include "indicadores_empleados.php"; ?>
             </div>
