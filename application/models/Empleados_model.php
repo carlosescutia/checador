@@ -5,9 +5,9 @@ class Empleados_model extends CI_Model {
         parent::__construct();
     }
 
-    public function get_empleados() {
-        $sql = 'select e.*, h.desc_horario from empleados e left join horarios h on e.cve_horario = h.cve_horario order by e.nom_empleado;';
-        $query = $this->db->query($sql);
+    public function get_empleados_status($activo) {
+        $sql = 'select e.*, h.desc_horario from empleados e left join horarios h on e.cve_horario = h.cve_horario where activo = ? order by e.nom_empleado;';
+        $query = $this->db->query($sql, array($activo));
         return $query->result_array();
     }
 
