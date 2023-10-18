@@ -26,20 +26,20 @@
                     </div>
                 </div>
             </div>
-            <?php foreach ($incidentes as $incidentes_item) { ?>
+            <?php foreach ($incidentes_empleado as $incidentes_empleado_item) { ?>
             <div class="col-sm-6 alternate-color">
                 <div class="row">
                     <div class="col-sm-3 align-self-center">
-                        <p><?= date('d/m/Y', strtotime($incidentes_item['fecha'])) ?></p>
+                        <p><?= date('d/m/Y', strtotime($incidentes_empleado_item['fecha'])) ?></p>
                     </div>
                     <div class="col-sm-2 align-self-center">
-                        <p><?= $incidentes_item['hora_entrada'] ?></p>
+                        <p><?= $incidentes_empleado_item['hora_entrada'] ?></p>
                     </div>
                     <div class="col-sm-2 align-self-center">
-                        <p><?= $incidentes_item['hora_salida'] ?></p>
+                        <p><?= $incidentes_empleado_item['hora_salida'] ?></p>
                     </div>
                     <div class="col-sm-4 align-self-center">
-                        <p><?= $incidentes_item['incidente'] ?></p>
+                        <p><?= $incidentes_empleado_item['incidente'] ?></p>
                     </div>
                 </div>
             </div>
