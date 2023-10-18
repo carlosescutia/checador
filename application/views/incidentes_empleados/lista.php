@@ -23,21 +23,27 @@
                         <div class="col-sm-2 align-self-center">
                             <p class="small"><strong>Horario</strong></p>
                         </div>
+                        <div class="col-sm-2 align-self-center">
+                            <p class="small text-center"><strong>Incidentes</strong></p>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <?php foreach ($empleados as $empleados_item) { ?>
+                <?php foreach ($incidentes_empleados as $incidentes_empleados_item) { ?>
                 <div class="col-sm-7 alternate-color">
                     <div class="row">
                         <div class="col-sm-2 align-self-center">
-                            <p><?= $empleados_item['cod_empleado'] ?></p>
+                            <p><?= $incidentes_empleados_item['cod_empleado'] ?></p>
                         </div>
                         <div class="col-sm-5 align-self-center">
-                            <p><a href="<?=base_url()?>incidentes_empleados/detalle/<?=$empleados_item['cve_empleado']?>"><?= $empleados_item['nom_empleado'] ?></a></p>
+                            <p><a href="<?=base_url()?>incidentes_empleados/detalle/<?=$incidentes_empleados_item['cve_empleado']?>"><?= $incidentes_empleados_item['nom_empleado'] ?></a></p>
                         </div>
                         <div class="col-sm-2 align-self-center">
-                            <p><?= $empleados_item['desc_horario'] ?></p>
+                            <p><?= $incidentes_empleados_item['desc_horario'] ?></p>
+                        </div>
+                        <div class="col-sm-2 align-self-center">
+                            <p class="text-center"><?= $incidentes_empleados_item['num_incidentes'] ?></p>
                         </div>
                     </div>
                 </div>

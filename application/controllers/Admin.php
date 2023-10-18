@@ -10,6 +10,7 @@ class Admin extends CI_Controller {
         $this->load->model('bitacora_model');
         $this->load->model('parametros_sistema_model');
         $this->load->model('empleados_model');
+        $this->load->model('incidentes_model');
     }
 
     public function get_userdata()
@@ -46,7 +47,16 @@ class Admin extends CI_Controller {
             $data += $this->get_system_params();
 
             $activo = "1";
-            $data['num_empleados'] = $this->empleados_model->get_num_empleados($activo);
+            $data['tot_empleados_activos'] = $this->empleados_model->get_num_empleados($activo);
+
+            $mes = "10";
+            $anio = "2023";
+            $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
+            $data['tot_incidentes'] = $this->incidentes_model->get_tot_incidentes($mes, $anio, $tiempo_tolerancia);
+            $data['tot_empleados_incidentes'] = $this->incidentes_model->get_tot_empleados_incidentes($mes, $anio, $tiempo_tolerancia);
+            $data['tot_dias_habiles'] = $this->incidentes_model->get_tot_dias_habiles($mes, $anio);
+            $data['tot_dias_incidentes'] = $this->incidentes_model->get_tot_dias_incidentes($mes, $anio, $tiempo_tolerancia);
+
 
             $this->load->view('templates/admheader', $data);
             $this->load->view('admin/inicio', $data);

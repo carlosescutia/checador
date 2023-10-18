@@ -28,6 +28,9 @@
                         <div class="col-sm-2 align-self-center">
                             <p class="small"><strong>Horario</strong></p>
                         </div>
+                        <div class="col-sm-2 align-self-center">
+                            <p class="small text-center"><strong>Activo</strong></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -43,6 +46,9 @@
                         </div>
                         <div class="col-sm-2 align-self-center">
                             <p><?= $empleados_item['desc_horario'] ?></p>
+                        </div>
+                        <div class="col-sm-2 align-self-center">
+                            <p class="text-center"><?= $empleados_item['activo'] ?></p>
                         </div>
                         <div class="col-sm-1">
                             <?php 

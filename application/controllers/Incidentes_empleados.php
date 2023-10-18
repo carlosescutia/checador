@@ -46,8 +46,10 @@ class Incidentes_empleados extends CI_Controller {
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            $activo = '1';
-            $data['empleados'] = $this->empleados_model->get_empleados_status($activo);
+            $mes = "10";
+            $anio = "2023";
+            $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
+            $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados($mes, $anio, $tiempo_tolerancia);
 
             $this->load->view('templates/admheader', $data);
             $this->load->view('templates/dlg_borrar');
@@ -70,7 +72,7 @@ class Incidentes_empleados extends CI_Controller {
             $mes = "10";
             $anio = "2023";
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
-            $data['incidentes'] = $this->incidentes_model->get_incidentes_empleado($cve_empleado, $mes, $anio, $tiempo_tolerancia);
+            $data['incidentes_empleado'] = $this->incidentes_model->get_incidentes_empleado($cve_empleado, $mes, $anio, $tiempo_tolerancia);
 
             $this->load->view('templates/admheader', $data);
             $this->load->view('incidentes_empleados/detalle', $data);
