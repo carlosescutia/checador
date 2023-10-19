@@ -49,8 +49,34 @@ class Admin extends CI_Controller {
             $activo = "1";
             $data['tot_empleados_activos'] = $this->empleados_model->get_num_empleados($activo);
 
-            $mes = "10";
-            $anio = "2023";
+
+            $filtros = $this->input->post();
+            if ($filtros) {
+
+                $mes = $filtros['mes'];
+                $anio = $filtros['anio'];
+                $filtros_proyectos = array(
+                    'mes' => $mes,
+                    'anio' => $anio,
+                );
+                $this->session->set_userdata($filtros_proyectos);
+
+            } else {
+                if ($this->session->userdata('mes')) {
+                    $mes = $this->session->userdata('mes');
+                } else {
+                    $mes = date('m');
+                }
+                if ($this->session->userdata('anio')) {
+                    $anio = $this->session->userdata('anio');
+                } else {
+                    $anio = date('Y');
+                }
+			}
+            $data['mes'] = $mes;
+            $data['anio'] = $anio;
+            $data['curr_controller'] = base_url() . 'admin';
+
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['tot_incidentes'] = $this->incidentes_model->get_tot_incidentes($mes, $anio, $tiempo_tolerancia);
             $data['tot_empleados_incidentes'] = $this->incidentes_model->get_tot_empleados_incidentes($mes, $anio, $tiempo_tolerancia);
@@ -74,8 +100,33 @@ class Admin extends CI_Controller {
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            $mes = "10";
-            $anio = "2023";
+            $filtros = $this->input->post();
+            if ($filtros) {
+
+                $mes = $filtros['mes'];
+                $anio = $filtros['anio'];
+                $filtros_proyectos = array(
+                    'mes' => $mes,
+                    'anio' => $anio,
+                );
+                $this->session->set_userdata($filtros_proyectos);
+
+            } else {
+                if ($this->session->userdata('mes')) {
+                    $mes = $this->session->userdata('mes');
+                } else {
+                    $mes = date('m');
+                }
+                if ($this->session->userdata('anio')) {
+                    $anio = $this->session->userdata('anio');
+                } else {
+                    $anio = date('Y');
+                }
+			}
+            $data['mes'] = $mes;
+            $data['anio'] = $anio;
+            $data['curr_controller'] = base_url() . 'admin/empleados_activos';
+
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados_todos($mes, $anio, $tiempo_tolerancia);
 
@@ -95,8 +146,33 @@ class Admin extends CI_Controller {
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            $mes = "10";
-            $anio = "2023";
+            $filtros = $this->input->post();
+            if ($filtros) {
+
+                $mes = $filtros['mes'];
+                $anio = $filtros['anio'];
+                $filtros_proyectos = array(
+                    'mes' => $mes,
+                    'anio' => $anio,
+                );
+                $this->session->set_userdata($filtros_proyectos);
+
+            } else {
+                if ($this->session->userdata('mes')) {
+                    $mes = $this->session->userdata('mes');
+                } else {
+                    $mes = date('m');
+                }
+                if ($this->session->userdata('anio')) {
+                    $anio = $this->session->userdata('anio');
+                } else {
+                    $anio = date('Y');
+                }
+			}
+            $data['mes'] = $mes;
+            $data['anio'] = $anio;
+            $data['curr_controller'] = base_url() . 'admin/empleados_incidentes';
+
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados_pendientes($mes, $anio, $tiempo_tolerancia);
 
@@ -118,8 +194,33 @@ class Admin extends CI_Controller {
 
             $data['empleado'] = $this->empleados_model->get_empleado($cve_empleado);
 
-            $mes = "10";
-            $anio = "2023";
+            $filtros = $this->input->post();
+            if ($filtros) {
+
+                $mes = $filtros['mes'];
+                $anio = $filtros['anio'];
+                $filtros_proyectos = array(
+                    'mes' => $mes,
+                    'anio' => $anio,
+                );
+                $this->session->set_userdata($filtros_proyectos);
+
+            } else {
+                if ($this->session->userdata('mes')) {
+                    $mes = $this->session->userdata('mes');
+                } else {
+                    $mes = date('m');
+                }
+                if ($this->session->userdata('anio')) {
+                    $anio = $this->session->userdata('anio');
+                } else {
+                    $anio = date('Y');
+                }
+			}
+            $data['mes'] = $mes;
+            $data['anio'] = $anio;
+            $data['curr_controller'] = base_url() . 'admin/empleados_detalle/' . $cve_empleado;
+
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['incidentes_empleado'] = $this->incidentes_model->get_incidentes_empleado($cve_empleado, $mes, $anio, $tiempo_tolerancia);
 
@@ -138,8 +239,33 @@ class Admin extends CI_Controller {
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            $mes = "10";
-            $anio = "2023";
+            $filtros = $this->input->post();
+            if ($filtros) {
+
+                $mes = $filtros['mes'];
+                $anio = $filtros['anio'];
+                $filtros_proyectos = array(
+                    'mes' => $mes,
+                    'anio' => $anio,
+                );
+                $this->session->set_userdata($filtros_proyectos);
+
+            } else {
+                if ($this->session->userdata('mes')) {
+                    $mes = $this->session->userdata('mes');
+                } else {
+                    $mes = date('m');
+                }
+                if ($this->session->userdata('anio')) {
+                    $anio = $this->session->userdata('anio');
+                } else {
+                    $anio = date('Y');
+                }
+			}
+            $data['mes'] = $mes;
+            $data['anio'] = $anio;
+            $data['curr_controller'] = base_url() . 'admin/fechas_incidentes';
+
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['incidentes_fechas'] = $this->incidentes_model->get_incidentes_fechas($mes, $anio, $tiempo_tolerancia);
 
@@ -159,13 +285,38 @@ class Admin extends CI_Controller {
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            $mes = "10";
-            $anio = "2023";
+            $filtros = $this->input->post();
+            if ($filtros) {
+
+                $mes = $filtros['mes'];
+                $anio = $filtros['anio'];
+                $filtros_proyectos = array(
+                    'mes' => $mes,
+                    'anio' => $anio,
+                );
+                $this->session->set_userdata($filtros_proyectos);
+
+            } else {
+                if ($this->session->userdata('mes')) {
+                    $mes = $this->session->userdata('mes');
+                } else {
+                    $mes = date('m');
+                }
+                if ($this->session->userdata('anio')) {
+                    $anio = $this->session->userdata('anio');
+                } else {
+                    $anio = date('Y');
+                }
+			}
+            $data['mes'] = $mes;
+            $data['anio'] = $anio;
+            $data['curr_controller'] = base_url() . 'admin/fechas_detalle/' . $fecha;
+
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_fecha($fecha, $mes, $anio, $tiempo_tolerancia);
 
             $this->load->view('templates/admheader', $data);
-            $this->load->view('admin/empleados_lista', $data);
+            $this->load->view('admin/empleados_lista_fecha', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');
@@ -174,6 +325,7 @@ class Admin extends CI_Controller {
 
 
     public function login() {
+        $this->session->sess_destroy();
         $data = array();
         $data['error'] = $this->session->flashdata('error');
         $data += $this->get_system_params();
