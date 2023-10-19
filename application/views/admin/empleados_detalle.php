@@ -2,8 +2,11 @@
 
     <div class="col-md-12 mb-3 pb-2 pt-3 border-bottom">
         <div class="row">
-            <div class="col-md-10">
-                <h1>Incidentes de <?=$empleado['nom_empleado'] ?></h1>
+            <div class="col-md-4">
+                <h3>Incidentes de <?=$empleado['nom_empleado'] ?></h3>
+            </div>
+            <div class="col-sm-4 text-left">
+                <?php include 'selector_mes.php' ?>
             </div>
         </div>
     </div>

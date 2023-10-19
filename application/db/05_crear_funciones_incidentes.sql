@@ -56,7 +56,7 @@ begin
     select 
         distinct dh.fecha, e.cve_empleado, min(a.hora) as hora_entrada, max(a.hora) as hora_salida
     from 
-        dias_habiles('10', '2023') dh 
+        dias_habiles(mes, anio) dh 
         cross join empleados e 
         left join asistencias a on dh.fecha = a.fecha and e.cve_empleado = a.cve_empleado
     where
