@@ -131,6 +131,48 @@ class Admin extends CI_Controller {
         }
     }
 
+    public function fechas_incidentes()
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $data += $this->get_system_params();
+
+            $mes = "10";
+            $anio = "2023";
+            $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
+            $data['incidentes_fechas'] = $this->incidentes_model->get_incidentes_fechas($mes, $anio, $tiempo_tolerancia);
+
+            $this->load->view('templates/admheader', $data);
+            $this->load->view('templates/dlg_borrar');
+            $this->load->view('admin/fechas_lista', $data);
+            $this->load->view('templates/footer', $data);
+        } else {
+            redirect('admin/login');
+        }
+    }
+
+    public function fechas_detalle($fecha)
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $data += $this->get_system_params();
+
+            $mes = "10";
+            $anio = "2023";
+            $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
+            $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_fecha($fecha, $mes, $anio, $tiempo_tolerancia);
+
+            $this->load->view('templates/admheader', $data);
+            $this->load->view('admin/empleados_lista', $data);
+            $this->load->view('templates/footer', $data);
+        } else {
+            redirect('admin/login');
+        }
+    }
+
+
     public function login() {
         $data = array();
         $data['error'] = $this->session->flashdata('error');

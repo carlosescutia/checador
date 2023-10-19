@@ -13,7 +13,7 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-6 text-center">
-                        <h6>Días con incidentes</h6>
+                        <h6><a href="<?=base_url()?>admin/fechas_incidentes">Días con incidentes</a></h6>
                         <h1><?= $tot_dias_incidentes ?></h1>
                     </div>
                     <div class="col-md-6 text-center">
@@ -47,4 +47,3 @@
         <hr>
     </div>
 </div>
-

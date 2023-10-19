@@ -51,7 +51,7 @@
 
     <div class="form-group row">
         <div class="col-sm-10">
-            <a href="<?=base_url()?>incidentes_empleados" class="btn btn-secondary">Volver</a>
+            <a href="#" onclick="history.go(-1);event.preventDefault();" class="btn btn-secondary">Volver</a>
         </div>
     </div>
 
