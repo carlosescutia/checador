@@ -35,5 +35,6 @@
     <?php include 'js/inicio.js'; ?>
     <?php include 'js/grafico_empleados.js'; ?>
     <?php include 'js/grafico_dias.js'; ?>
+    <?php include 'js/grafico_carga.js'; ?>
 
 </main>

@@ -56,6 +56,7 @@ class Admin extends CI_Controller {
             $data['tot_empleados_incidentes'] = $this->incidentes_model->get_tot_empleados_incidentes($mes, $anio, $tiempo_tolerancia);
             $data['tot_dias_habiles'] = $this->incidentes_model->get_tot_dias_habiles($mes, $anio);
             $data['tot_dias_incidentes'] = $this->incidentes_model->get_tot_dias_incidentes($mes, $anio, $tiempo_tolerancia);
+            $data['tot_dias_info'] = $this->incidentes_model->get_tot_dias_info($mes, $anio);
 
 
             $this->load->view('templates/admheader', $data);
@@ -63,6 +64,70 @@ class Admin extends CI_Controller {
             $this->load->view('templates/footer', $data);
         } else {
             $this->login();
+        }
+    }
+
+    public function empleados_activos()
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $data += $this->get_system_params();
+
+            $mes = "10";
+            $anio = "2023";
+            $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
+            $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados_todos($mes, $anio, $tiempo_tolerancia);
+
+            $this->load->view('templates/admheader', $data);
+            $this->load->view('templates/dlg_borrar');
+            $this->load->view('admin/empleados_lista', $data);
+            $this->load->view('templates/footer', $data);
+        } else {
+            redirect('admin/login');
+        }
+    }
+
+    public function empleados_incidentes()
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $data += $this->get_system_params();
+
+            $mes = "10";
+            $anio = "2023";
+            $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
+            $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados_pendientes($mes, $anio, $tiempo_tolerancia);
+
+            $this->load->view('templates/admheader', $data);
+            $this->load->view('templates/dlg_borrar');
+            $this->load->view('admin/empleados_lista', $data);
+            $this->load->view('templates/footer', $data);
+        } else {
+            redirect('admin/login');
+        }
+    }
+
+    public function empleados_detalle($cve_empleado)
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $data += $this->get_system_params();
+
+            $data['empleado'] = $this->empleados_model->get_empleado($cve_empleado);
+
+            $mes = "10";
+            $anio = "2023";
+            $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
+            $data['incidentes_empleado'] = $this->incidentes_model->get_incidentes_empleado($cve_empleado, $mes, $anio, $tiempo_tolerancia);
+
+            $this->load->view('templates/admheader', $data);
+            $this->load->view('admin/empleados_detalle', $data);
+            $this->load->view('templates/footer', $data);
+        } else {
+            redirect('admin/login');
         }
     }
 
