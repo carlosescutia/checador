@@ -26,6 +26,21 @@ class Incidentes_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function get_incidentes_fechas($mes, $anio, $tiempo_tolerancia)
+    {
+        $sql = 'select fecha, count(incidente) as num_incidentes from incidentes(?,?,?) where incidente is not null group by fecha order by fecha';
+        $query = $this->db->query($sql, array($mes, $anio, $tiempo_tolerancia));
+        return $query->result_array();
+    }
+
+    public function get_incidentes_fecha($fecha, $mes, $anio, $tiempo_tolerancia)
+    {
+        $sql = 'select i.cve_empleado, e.cod_empleado, e.nom_empleado, h.desc_horario, count(i.incidente) as num_incidentes from incidentes(?,?,?) i left join empleados e on i.cve_empleado = e.cve_empleado left join horarios h on e.cve_horario = h.cve_horario where fecha = ? and incidente is not null group by i.cve_empleado, e.cod_empleado, e.nom_empleado, h.desc_horario order by e.nom_empleado';
+        $query = $this->db->query($sql, array($mes, $anio, $tiempo_tolerancia, $fecha));
+        return $query->result_array();
+    }
+
+
     public function get_tot_incidentes($mes, $anio, $tiempo_tolerancia)
     {
         $sql = 'select count(incidente) as tot_incidentes from incidentes(?,?,?)';
