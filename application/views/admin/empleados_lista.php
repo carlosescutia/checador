@@ -37,7 +37,7 @@
                             <p><?= $incidentes_empleados_item['cod_empleado'] ?></p>
                         </div>
                         <div class="col-sm-5 align-self-center">
-                            <p><a href="<?=base_url()?>incidentes_empleados/detalle/<?=$incidentes_empleados_item['cve_empleado']?>"><?= $incidentes_empleados_item['nom_empleado'] ?></a></p>
+                            <p><a href="<?=base_url()?>admin/empleados_detalle/<?=$incidentes_empleados_item['cve_empleado']?>"><?= $incidentes_empleados_item['nom_empleado'] ?></a></p>
                         </div>
                         <div class="col-sm-2 align-self-center">
                             <p><?= $incidentes_empleados_item['desc_horario'] ?></p>
@@ -56,7 +56,7 @@
 
     <div class="form-group row">
         <div class="col-sm-10">
-            <a href="#" class="btn btn-secondary">Volver</a>
+            <a href="<?=base_url()?>admin" class="btn btn-secondary">Volver</a>
         </div>
     </div>
 

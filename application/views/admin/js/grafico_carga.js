@@ -1,12 +1,12 @@
 <script>
 /**********************************************
  * 
- * Grafico avance de incidencias por dia
+ * Grafico avance de carga de informacion
  *
  * ****************************************/
 
-	var ctx = document.getElementById("avance_dias").getContext("2d");
-    indicador_avance_dias = '<?= ($tot_dias_info - $tot_dias_incidentes) / $tot_dias_info ?>';
+	var ctx = document.getElementById("carga_info").getContext("2d");
+    indicador_avance = '<?= $tot_dias_info / $tot_dias_habiles ?>';
 
 	var chart = new Chart(ctx, {
 		type: 'gauge',
@@ -14,7 +14,7 @@
             labels: ['1 / 3', '2 / 3', '3 / 3'],
 			datasets: [{
                 data: [0.3, 0.6, 1],
-				value: indicador_avance_dias,
+				value: indicador_avance,
 				backgroundColor: ['red', 'yellow', 'green'],
 				borderWidth: 2
 			}]
