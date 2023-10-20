@@ -11,6 +11,7 @@ class Admin extends CI_Controller {
         $this->load->model('parametros_sistema_model');
         $this->load->model('empleados_model');
         $this->load->model('incidentes_model');
+        $this->load->model('justificantes_model');
     }
 
     public function get_userdata()
@@ -223,8 +224,11 @@ class Admin extends CI_Controller {
 
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['incidentes_empleado'] = $this->incidentes_model->get_incidentes_empleado($cve_empleado, $mes, $anio, $tiempo_tolerancia);
+            $data['vacaciones_empleado'] = $this->justificantes_model->get_vacaciones_empleado($anio, $cve_empleado);
+            $data['justificantes_empleado'] = $this->justificantes_model->get_justificantes_empleado($mes, $anio, $cve_empleado);
 
             $this->load->view('templates/admheader', $data);
+            $this->load->view('templates/dlg_borrar');
             $this->load->view('admin/empleados_detalle', $data);
             $this->load->view('templates/footer', $data);
         } else {
