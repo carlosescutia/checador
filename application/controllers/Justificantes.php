@@ -38,7 +38,7 @@ class Justificantes extends CI_Controller {
         return $data;
     }
 
-    public function detalle($cve_justificante)
+    public function detalle_justificante($cve_justificante)
     {
         if ($this->session->userdata('logueado')) {
             $data = [];
@@ -48,7 +48,24 @@ class Justificantes extends CI_Controller {
             $data['justificante'] = $this->justificantes_model->get_justificante($cve_justificante);
 
             $this->load->view('templates/admheader', $data);
-            $this->load->view('justificantes/detalle', $data);
+            $this->load->view('justificantes/detalle_justificante', $data);
+            $this->load->view('templates/footer', $data);
+        } else {
+            redirect('admin/login');
+        }
+    }
+    
+    public function detalle_vacacion($cve_justificante)
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $data += $this->get_system_params();
+
+            $data['justificante'] = $this->justificantes_model->get_justificante($cve_justificante);
+
+            $this->load->view('templates/admheader', $data);
+            $this->load->view('justificantes/detalle_vacacion', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');

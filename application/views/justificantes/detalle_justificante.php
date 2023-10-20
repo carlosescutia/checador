@@ -40,6 +40,8 @@
             </div>
         </div>
 
+        <input type="hidden" name="cve_empleado" id="cve_empleado" value="<?=$justificante['cve_empleado']?>">
+
     </form>
 
     <hr />
