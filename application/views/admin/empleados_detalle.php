@@ -54,8 +54,11 @@
                         <div class="card-body">
                             <?php foreach ($vacaciones_empleado as $vacaciones_empleado_item) { ?>
                             <div class="row alternate-color">
-                                <div class="col-sm-5 offset-sm-1">
-                                    <p><a href="<?=base_url()?>justificantes/detalle/<?=$vacaciones_empleado_item['cve_justificante']?>"><?= date('d/m/Y', strtotime($vacaciones_empleado_item['fecha'])) ?></a></p>
+                                <div class="col">
+                                    <p><a href="<?=base_url()?>justificantes/detalle_vacacion/<?=$vacaciones_empleado_item['cve_justificante']?>"><?= date('d/m/Y', strtotime($vacaciones_empleado_item['fecha'])) ?></a></p>
+                                </div>
+                                <div class="col">
+                                    <p><?= $vacaciones_empleado_item['detalle'] ?></p>
                                 </div>
                                 <div class="col-sm-1">
                                     <?php 
@@ -79,8 +82,11 @@
                         <div class="card-body">
                             <?php foreach ($justificantes_empleado as $justificantes_empleado_item) { ?>
                             <div class="row alternate-color">
-                                <div class="col-sm-5 offset-sm-1">
-                                    <p><a href="<?=base_url()?>justificantes/detalle/<?=$justificantes_empleado_item['cve_justificante']?>"><?= date('d/m/Y', strtotime($justificantes_empleado_item['fecha'])) ?> - <?= $justificantes_empleado_item['tipo'] ?></a></p>
+                                <div class="col">
+                                    <p><a href="<?=base_url()?>justificantes/detalle_justificante/<?=$justificantes_empleado_item['cve_justificante']?>"><?= date('d/m/Y', strtotime($justificantes_empleado_item['fecha'])) ?> - <?= $justificantes_empleado_item['tipo'] ?></a></p>
+                                </div>
+                                <div class="col">
+                                    <p><?= $justificantes_empleado_item['detalle'] ?></p>
                                 </div>
                                 <div class="col-sm-1">
                                     <?php 
