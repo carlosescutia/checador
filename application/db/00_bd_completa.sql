@@ -103,7 +103,8 @@ CREATE TABLE justificantes (
     cve_empleado int,
     fecha date,
     tipo text,
-    documento text
+    documento text,
+    detalle text
 );
 
 DROP TABLE IF EXISTS justificantes_masivos;
