@@ -148,37 +148,4 @@ class Reportes extends CI_Controller {
         }
     }
 
-	public function listado_asistencia_01()
-	{
-		if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $data += $this->get_system_params();
-
-			$filtros = $this->input->post();
-			if ($filtros) {
-				$accion = $filtros['accion'];
-				$entidad = $filtros['entidad'];
-			} else {
-				$accion = '';
-				$entidad = '';
-			}
-
-			$data['accion'] = $accion;
-			$data['entidad'] = $entidad;
-            $cve_rol = $data['cve_rol'];
-
-            $nom_organizacion = $this->session->userdata['nom_organizacion'];
-            $usuario = $this->session->userdata['usuario'];
-			$data['asistencias'] = $this->asistencias_model->get_asistencias();
-
-			$this->load->view('templates/admheader', $data);
-			$this->load->view('reportes/listado_asistencia_01', $data);
-			$this->load->view('templates/footer', $data);
-		} else {
-			redirect('admin/login');
-		}
-	}
-
-
 }
