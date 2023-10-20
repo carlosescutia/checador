@@ -3,7 +3,7 @@
         <div class="col-sm-12 alternate-color">
             <div class="row">
                 <div class="col-sm-8 text-left">
-                    <h2>Empleados con incidencias en dia</h2>
+                    <h2><?= $titulo ?></h2>
                 </div>
             </div>
         </div>

@@ -130,6 +130,7 @@ class Admin extends CI_Controller {
 
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados_todos($mes, $anio, $tiempo_tolerancia);
+            $data['titulo'] = 'Incidentes de empleados activos';
 
             $this->load->view('templates/admheader', $data);
             $this->load->view('templates/dlg_borrar');
@@ -176,6 +177,7 @@ class Admin extends CI_Controller {
 
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados_pendientes($mes, $anio, $tiempo_tolerancia);
+            $data['titulo'] = 'Incidentes por empleado';
 
             $this->load->view('templates/admheader', $data);
             $this->load->view('templates/dlg_borrar');
@@ -318,6 +320,7 @@ class Admin extends CI_Controller {
 
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_fecha($fecha, $mes, $anio, $tiempo_tolerancia);
+            $data['titulo'] = 'Incidentes del día ' . date('d/m/Y', strtotime($fecha));
 
             $this->load->view('templates/admheader', $data);
             $this->load->view('admin/empleados_lista_fecha', $data);
