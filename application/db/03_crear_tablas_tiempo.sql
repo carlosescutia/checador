@@ -1,10 +1,3 @@
-DROP TABLE IF EXISTS vacaciones;
-CREATE TABLE vacaciones (
-    cve_vacacion serial,
-    cve_empleado int,
-    fecha date
-);
-
 DROP TABLE IF EXISTS dias_inhabiles;
 CREATE TABLE dias_inhabiles (
     cve_dia_inhabil serial,
