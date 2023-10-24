@@ -72,6 +72,28 @@ begin
 			where 
 				j.tipo in ('S','D','V')
 		)
+		union
+		(
+		    select 
+                e.cve_empleado, jm.fecha, h.hora_entrada as hora, jm.tipo as fuente 
+            from 
+                justificantes_masivos jm 
+                cross join empleados e 
+                left join horarios h on e.cve_horario = h.cve_horario 
+            where 
+                jm.tipo in ('E','D')
+                and e.activo = 1 
+		union
+		    select 
+                e.cve_empleado, jm.fecha, h.hora_salida as hora, jm.tipo as fuente 
+            from 
+                justificantes_masivos jm 
+                cross join empleados e 
+                left join horarios h on e.cve_horario = h.cve_horario 
+            where 
+                jm.tipo in ('S','D')
+                and e.activo = 1 
+		) 
     ;
 end;
 $$ language plpgsql strict immutable;
