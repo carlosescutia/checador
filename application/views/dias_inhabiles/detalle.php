@@ -1,4 +1,5 @@
 <main role="main" class="ml-sm-auto px-4">
+    <?php $url_padre = $this->session->userdata('url_padre'); ?>
 
     <form method="post" action="<?= base_url() ?>dias_inhabiles/guardar/<?= $dia_inhabil['cve_dia_inhabil'] ?>">
 
@@ -26,7 +27,6 @@
                     <input type="text" class="form-control" name="desc_dia_inhabil" id="desc_dia_inhabil" value="<?=$dia_inhabil['desc_dia_inhabil'] ?>">
                 </div>
             </div>
-
         </div>
 
     </form>
@@ -35,7 +35,7 @@
 
     <div class="form-group row">
         <div class="col-sm-10">
-            <a href="<?=base_url()?>dias_inhabiles" class="btn btn-secondary">Volver</a>
+            <a href="<?=$url_padre ?>" class="btn btn-secondary">Volver</a>
         </div>
     </div>
 

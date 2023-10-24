@@ -1,4 +1,5 @@
 <main role="main" class="ml-sm-auto px-4 mb-3">
+    <?php $this->session->set_userdata('url_actual', current_url()); ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <div class="col-sm-12 alternate-color">
             <div class="row">
@@ -14,7 +15,7 @@
 
     <div class="row mb-5">
         <div class="col-sm-12">
-            <?php include "incidentes_totales.php"; ?>
+            <?php include "indicador_incidentes_totales.php"; ?>
         </div>
     </div>
 
@@ -23,12 +24,12 @@
     <div class="row">
         <div class="col-sm-5 offset-sm-1">
             <div class="col-sm-12">
-                <?php include "incidentes_empleado.php"; ?>
+                <?php include "indicador_incidentes_empleado.php"; ?>
             </div>
         </div>
         <div class="col-sm-5">
             <div class="col-sm-12">
-                <?php include "incidentes_dia.php"; ?>
+                <?php include "indicador_incidentes_fecha.php"; ?>
             </div>
         </div>
     </div>

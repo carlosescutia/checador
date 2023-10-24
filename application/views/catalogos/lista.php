@@ -18,12 +18,6 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <?php include "dias_inhabiles/boton.php" ?>
-                </div>
-                <div class="col-md-4">
-                    <?php include "justificantes_masivos/boton.php" ?>
-                </div>
-                <div class="col-md-4">
                     <?php include "horarios/boton.php" ?>
                 </div>
             </div>

@@ -38,24 +38,6 @@ class Justificantes_masivos extends CI_Controller {
         return $data;
     }
 
-    public function index()
-    {
-        if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $data += $this->get_system_params();
-
-            $data['justificantes_masivos'] = $this->justificantes_masivos_model->get_justificantes_masivos();
-
-            $this->load->view('templates/admheader', $data);
-            $this->load->view('templates/dlg_borrar');
-            $this->load->view('catalogos/justificantes_masivos/lista', $data);
-            $this->load->view('templates/footer', $data);
-        } else {
-            redirect('admin/login');
-        }
-    }
-
     public function detalle($cve_justificante_masivo)
     {
         if ($this->session->userdata('logueado')) {
@@ -66,7 +48,7 @@ class Justificantes_masivos extends CI_Controller {
             $data['justificante_masivo'] = $this->justificantes_masivos_model->get_justificante_masivo($cve_justificante_masivo);
 
             $this->load->view('templates/admheader', $data);
-            $this->load->view('catalogos/justificantes_masivos/detalle', $data);
+            $this->load->view('justificantes_masivos/detalle', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');
@@ -85,7 +67,7 @@ class Justificantes_masivos extends CI_Controller {
             }
 
             $this->load->view('templates/admheader', $data);
-            $this->load->view('catalogos/justificantes_masivos/nuevo', $data);
+            $this->load->view('justificantes_masivos/nuevo', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');
@@ -137,7 +119,8 @@ class Justificantes_masivos extends CI_Controller {
 
             }
 
-            redirect('justificantes_masivos');
+            $url_padre = $this->session->userdata('url_padre');
+            redirect($url_padre);
 
         } else {
             redirect('admin/login');
@@ -173,7 +156,8 @@ class Justificantes_masivos extends CI_Controller {
             // eliminado
             $this->justificantes_masivos_model->eliminar($cve_justificante_masivo);
 
-            redirect('justificantes_masivos');
+            $url_padre = $this->session->userdata('url_padre');
+            redirect($url_padre);
 
         } else {
             redirect('admin/login');

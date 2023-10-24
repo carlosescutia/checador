@@ -1,4 +1,6 @@
 <main role="main" class="ml-sm-auto px-4">
+    <?php $this->session->set_userdata('url_actual', current_url()); ?>
+    <?php $url_padre = $this->session->userdata('url_padre') ?>
 
     <div class="col-md-12 mb-3 pb-2 pt-3 border-bottom">
         <div class="row">
@@ -14,7 +16,7 @@
     <div class="card mt-0 mb-3 border-0">
         <div class="card-body">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-6 offset-sm-1">
                     <div class="row">
                         <div class="col-sm-3 align-self-center">
                             <p class="fw-bold">Fecha</p>
@@ -46,60 +48,9 @@
                     </div>
                     <?php } ?>
                 </div>
-                <div class="col-sm-4 offset-sm-1 offset-sm-1 offset-sm-1">
-                    <div class="card mb-5">
-                        <div class="card-header card-sistema text-center">
-                            <strong>Vacaciones</strong>
-                        </div>
-                        <div class="card-body">
-                            <?php foreach ($vacaciones_empleado as $vacaciones_empleado_item) { ?>
-                            <div class="row alternate-color">
-                                <div class="col">
-                                    <p><a href="<?=base_url()?>justificantes/detalle_vacacion/<?=$vacaciones_empleado_item['cve_justificante']?>"><?= date('d/m/Y', strtotime($vacaciones_empleado_item['fecha'])) ?></a></p>
-                                </div>
-                                <div class="col">
-                                    <p><?= $vacaciones_empleado_item['detalle'] ?></p>
-                                </div>
-                                <div class="col-sm-1">
-                                    <?php 
-                                    $item_eliminar = date('d/m/Y', strtotime($vacaciones_empleado_item['fecha'])) . ' - ' . $vacaciones_empleado_item['tipo'];
-                                    $url = base_url() . "justificantes/eliminar/". $vacaciones_empleado_item['cve_justificante']; 
-                                    ?>
-                                    <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
-                                    </a></p>
-                                </div>
-                            </div>
-                            <?php } ?>
-                        </div>
-                        <div class="card-footer text-end">
-                            <a class="btn btn-primary btn-sm" href="<?=base_url()?>justificantes/nueva_vacacion/<?=$incidentes_empleado_item['cve_empleado']?>">Agregar</a>
-                        </div>
-                    </div>
-                    <div class="card mb-3">
-                        <div class="card-header card-sistema text-center">
-                            <strong>Justificantes</strong>
-                        </div>
-                        <div class="card-body">
-                            <?php foreach ($justificantes_empleado as $justificantes_empleado_item) { ?>
-                            <div class="row alternate-color">
-                                <div class="col">
-                                    <p><a href="<?=base_url()?>justificantes/detalle_justificante/<?=$justificantes_empleado_item['cve_justificante']?>"><?= date('d/m/Y', strtotime($justificantes_empleado_item['fecha'])) ?> - <?= $justificantes_empleado_item['tipo'] ?></a></p>
-                                </div>
-                                <div class="col">
-                                    <p><?= $justificantes_empleado_item['detalle'] ?></p>
-                                </div>
-                                <div class="col-sm-1">
-                                    <?php 
-                                    $item_eliminar = date('d/m/Y', strtotime($justificantes_empleado_item['fecha'])) . ' - ' . $justificantes_empleado_item['tipo'];
-                                    $url = base_url() . "justificantes/eliminar/". $justificantes_empleado_item['cve_justificante']; 
-                                    ?>
-                                    <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
-                                    </a></p>
-                                </div>
-                            </div>
-                            <?php } ?>
-                        </div>
-                    </div>
+                <div class="col-sm-4 offset-sm-1">
+                    <?php include "vacaciones.php" ?>
+                    <?php include "justificantes.php" ?>
                 </div>
             </div>
         </div>
@@ -109,7 +60,7 @@
 
     <div class="form-group row">
         <div class="col-sm-10">
-            <a href="#" onclick="history.go(-1);event.preventDefault();" class="btn btn-secondary">Volver</a>
+            <a href="<?=$url_padre ?>" class="btn btn-secondary">Volver</a>
         </div>
     </div>
 

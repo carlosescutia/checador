@@ -1,6 +1,8 @@
 <main role="main" class="ml-sm-auto px-4 mb-3">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <div class="col-sm-12 alternate-color">
+    <?php $this->session->set_userdata('url_actual', current_url()); ?>
+    <?php $this->session->set_userdata('url_padre', current_url()); ?>
+    <div class="col-md-12 mb-3 pb-2 pt-3 border-bottom">
+        <div class="col-sm-12">
             <div class="row">
                 <div class="col-sm-8 text-left">
                     <h2><?= $titulo ?></h2>
@@ -9,10 +11,10 @@
         </div>
     </div>
 
-    <div class="col-sm-12">
-        <div style="min-height: 46vh">
+    <div class="card mt-0 mb-3 border-0">
+        <div class="card-body">
             <div class="row">
-                <div class="col-sm-7">
+                <div class="col-sm-6 offset-sm-1">
                     <div class="row">
                         <div class="col-sm-2 align-self-center">
                             <p class="small"><strong>Clave</strong></p>
@@ -27,12 +29,8 @@
                             <p class="small text-center"><strong>Incidentes</strong></p>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <?php foreach ($incidentes_empleados as $incidentes_empleados_item) { ?>
-                <div class="col-sm-7 alternate-color">
-                    <div class="row">
+                    <?php foreach ($incidentes_empleados as $incidentes_empleados_item) { ?>
+                    <div class="row alternate-color">
                         <div class="col-sm-2 align-self-center">
                             <p><?= $incidentes_empleados_item['cod_empleado'] ?></p>
                         </div>
@@ -46,8 +44,12 @@
                             <p class="text-center"><?= $incidentes_empleados_item['num_incidentes'] ?></p>
                         </div>
                     </div>
+                    <?php } ?>
                 </div>
-                <?php } ?>
+                <div class="col-sm-4 offset-sm-1">
+                    <?php include "dias_inhabiles.php" ?>
+                    <?php include "justificantes_masivos.php" ?>
+                </div>
             </div>
         </div>
     </div>
@@ -56,9 +58,8 @@
 
     <div class="form-group row">
         <div class="col-sm-10">
-            <a href="#" onclick="history.go(-1);event.preventDefault();" class="btn btn-secondary">Volver</a>
+            <a href="<?=base_url()?>admin/fechas_incidentes" class="btn btn-secondary">Volver</a>
         </div>
     </div>
 
 </main>
-
