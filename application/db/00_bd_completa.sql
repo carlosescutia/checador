@@ -157,6 +157,66 @@ end;
 $$ language plpgsql strict immutable;
 
 /*
+Función asistencias_justificantes
+-----------------------
+Obtiene asistencias y justificantes por empleado en un mes y año
+Utilizada en la función asistencias()
+ */
+create or replace function asistencias_justificantes()
+returns table(cve_empleado int, fecha date, hora time, fuente text) as 
+$$
+begin
+    return query
+		select 
+			a.cve_empleado, a.fecha, a.hora, 'A' as fuente
+		from 
+			asistencias a 
+	union
+		( select 
+				j.cve_empleado, j.fecha, h.hora_entrada as hora, j.tipo as fuente
+			from 
+				justificantes j 
+				left join empleados e on j.cve_empleado = e.cve_empleado 
+				left join horarios h on e.cve_horario = h.cve_horario 
+			where 
+				j.tipo in ('E','D','V')
+		union 
+			select 
+				j.cve_empleado, j.fecha, h.hora_salida as hora, j.tipo as fuente
+			from 
+				justificantes j 
+				left join empleados e on j.cve_empleado = e.cve_empleado 
+				left join horarios h on e.cve_horario = h.cve_horario 
+			where 
+				j.tipo in ('S','D','V')
+		)
+		union
+		(
+		    select 
+                e.cve_empleado, jm.fecha, h.hora_entrada as hora, jm.tipo as fuente 
+            from 
+                justificantes_masivos jm 
+                cross join empleados e 
+                left join horarios h on e.cve_horario = h.cve_horario 
+            where 
+                jm.tipo in ('E','D')
+                and e.activo = 1 
+		union
+		    select 
+                e.cve_empleado, jm.fecha, h.hora_salida as hora, jm.tipo as fuente 
+            from 
+                justificantes_masivos jm 
+                cross join empleados e 
+                left join horarios h on e.cve_horario = h.cve_horario 
+            where 
+                jm.tipo in ('S','D')
+                and e.activo = 1 
+		) 
+    ;
+end;
+$$ language plpgsql strict immutable;
+
+/*
 Función asistencias
 -----------------------
 Obtiene asistencias (entrada y salida) por empleado en un mes y año
@@ -174,9 +234,9 @@ begin
     select 
         distinct dh.fecha, e.cve_empleado, min(a.hora) as hora_entrada, max(a.hora) as hora_salida
     from 
-        dias_habiles('10', '2023') dh 
+        dias_habiles(mes, anio) dh 
         cross join empleados e 
-        left join asistencias a on dh.fecha = a.fecha and e.cve_empleado = a.cve_empleado
+        left join asistencias_justificantes() a on dh.fecha = a.fecha and e.cve_empleado = a.cve_empleado
     where
         e.activo = 1
     group by
