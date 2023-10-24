@@ -38,24 +38,6 @@ class Dias_inhabiles extends CI_Controller {
         return $data;
     }
 
-    public function index()
-    {
-        if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $data += $this->get_system_params();
-
-            $data['dias_inhabiles'] = $this->dias_inhabiles_model->get_dias_inhabiles();
-
-            $this->load->view('templates/admheader', $data);
-            $this->load->view('templates/dlg_borrar');
-            $this->load->view('catalogos/dias_inhabiles/lista', $data);
-            $this->load->view('templates/footer', $data);
-        } else {
-            redirect('admin/login');
-        }
-    }
-
     public function detalle($cve_dia_inhabil)
     {
         if ($this->session->userdata('logueado')) {
@@ -66,7 +48,7 @@ class Dias_inhabiles extends CI_Controller {
             $data['dia_inhabil'] = $this->dias_inhabiles_model->get_dia_inhabil($cve_dia_inhabil);
 
             $this->load->view('templates/admheader', $data);
-            $this->load->view('catalogos/dias_inhabiles/detalle', $data);
+            $this->load->view('dias_inhabiles/detalle', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');
@@ -85,7 +67,7 @@ class Dias_inhabiles extends CI_Controller {
             }
 
             $this->load->view('templates/admheader', $data);
-            $this->load->view('catalogos/dias_inhabiles/nuevo', $data);
+            $this->load->view('dias_inhabiles/nuevo', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');
@@ -136,7 +118,8 @@ class Dias_inhabiles extends CI_Controller {
 
             }
 
-            redirect('dias_inhabiles');
+            $url_padre = $this->session->userdata('url_padre');
+            redirect($url_padre);
 
         } else {
             redirect('admin/login');
@@ -172,7 +155,8 @@ class Dias_inhabiles extends CI_Controller {
             // eliminado
             $this->dias_inhabiles_model->eliminar($cve_dia_inhabil);
 
-            redirect('dias_inhabiles');
+            $url_padre = $this->session->userdata('url_padre');
+            redirect($url_padre);
 
         } else {
             redirect('admin/login');

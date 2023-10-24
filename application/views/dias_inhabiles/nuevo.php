@@ -1,4 +1,5 @@
 <main role="main" class="ml-sm-auto px-4">
+    <?php $url_padre = $this->session->userdata('url_padre'); ?>
 
     <form method="post" action="<?= base_url() ?>dias_inhabiles/guardar">
 
@@ -30,12 +31,11 @@
 
     </form>
 
-
     <hr />
 
     <div class="form-group row">
         <div class="col-sm-10">
-            <a href="<?=base_url()?>dias_inhabiles" class="btn btn-secondary">Volver</a>
+            <a href="<?=$url_padre ?>" class="btn btn-secondary">Volver</a>
         </div>
     </div>
 

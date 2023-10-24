@@ -1,5 +1,6 @@
 <div class="col-sm-12 mb-3">
-    <form method="post" action="<?= $curr_controller ?>">
+    <?php $url_actual = $this->session->userdata('url_actual'); ?>
+    <form method="post" action="<?= $url_actual ?>">
         <div class="row">
             <div class="col">
                 <select class="form-select form-select-sm" id="mes" name="mes">

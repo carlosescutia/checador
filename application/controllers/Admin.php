@@ -12,6 +12,8 @@ class Admin extends CI_Controller {
         $this->load->model('empleados_model');
         $this->load->model('incidentes_model');
         $this->load->model('justificantes_model');
+        $this->load->model('dias_inhabiles_model');
+        $this->load->model('justificantes_masivos_model');
     }
 
     public function get_userdata()
@@ -76,7 +78,6 @@ class Admin extends CI_Controller {
 			}
             $data['mes'] = $mes;
             $data['anio'] = $anio;
-            $data['curr_controller'] = base_url() . 'admin';
 
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['tot_incidentes'] = $this->incidentes_model->get_tot_incidentes($mes, $anio, $tiempo_tolerancia);
@@ -126,10 +127,11 @@ class Admin extends CI_Controller {
 			}
             $data['mes'] = $mes;
             $data['anio'] = $anio;
-            $data['curr_controller'] = base_url() . 'admin/empleados_activos';
 
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados_todos($mes, $anio, $tiempo_tolerancia);
+            $data['dias_inhabiles'] = $this->dias_inhabiles_model->get_dias_inhabiles();
+            $data['justificantes_masivos'] = $this->justificantes_masivos_model->get_justificantes_masivos();
             $data['titulo'] = 'Incidentes de empleados activos';
 
             $this->load->view('templates/admheader', $data);
@@ -173,10 +175,11 @@ class Admin extends CI_Controller {
 			}
             $data['mes'] = $mes;
             $data['anio'] = $anio;
-            $data['curr_controller'] = base_url() . 'admin/empleados_incidentes';
 
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados_pendientes($mes, $anio, $tiempo_tolerancia);
+            $data['dias_inhabiles'] = $this->dias_inhabiles_model->get_dias_inhabiles();
+            $data['justificantes_masivos'] = $this->justificantes_masivos_model->get_justificantes_masivos();
             $data['titulo'] = 'Incidentes por empleado';
 
             $this->load->view('templates/admheader', $data);
@@ -222,7 +225,6 @@ class Admin extends CI_Controller {
 			}
             $data['mes'] = $mes;
             $data['anio'] = $anio;
-            $data['curr_controller'] = base_url() . 'admin/empleados_detalle/' . $cve_empleado;
 
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['incidentes_empleado'] = $this->incidentes_model->get_incidentes_empleado($cve_empleado, $mes, $anio, $tiempo_tolerancia);
@@ -270,10 +272,11 @@ class Admin extends CI_Controller {
 			}
             $data['mes'] = $mes;
             $data['anio'] = $anio;
-            $data['curr_controller'] = base_url() . 'admin/fechas_incidentes';
 
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['incidentes_fechas'] = $this->incidentes_model->get_incidentes_fechas($mes, $anio, $tiempo_tolerancia);
+            $data['dias_inhabiles'] = $this->dias_inhabiles_model->get_dias_inhabiles();
+            $data['justificantes_masivos'] = $this->justificantes_masivos_model->get_justificantes_masivos();
 
             $this->load->view('templates/admheader', $data);
             $this->load->view('templates/dlg_borrar');
@@ -316,14 +319,16 @@ class Admin extends CI_Controller {
 			}
             $data['mes'] = $mes;
             $data['anio'] = $anio;
-            $data['curr_controller'] = base_url() . 'admin/fechas_detalle/' . $fecha;
 
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
             $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_fecha($fecha, $mes, $anio, $tiempo_tolerancia);
+            $data['dias_inhabiles'] = $this->dias_inhabiles_model->get_dias_inhabiles();
+            $data['justificantes_masivos'] = $this->justificantes_masivos_model->get_justificantes_masivos();
             $data['titulo'] = 'Incidentes del día ' . date('d/m/Y', strtotime($fecha));
 
             $this->load->view('templates/admheader', $data);
-            $this->load->view('admin/empleados_lista_fecha', $data);
+            $this->load->view('templates/dlg_borrar');
+            $this->load->view('admin/fechas_detalle', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');
