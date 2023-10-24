@@ -46,6 +46,13 @@ class Importar extends CI_Controller {
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
+            $data['tot_asistencias'] = $this->asistencias_model->get_tot_asistencias();
+            $data['asistencia_antigua'] = $this->asistencias_model->get_asistencia_antigua();
+            $data['asistencia_reciente'] = $this->asistencias_model->get_asistencia_reciente();
+
+            $data['dias_cargar'] = $this->parametros_sistema_model->get_parametro_sistema_nom('dias_cargar');
+            $data['tiempo_tolerancia'] = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
+
             $this->load->view('templates/admheader', $data);
             $this->load->view('importar/index', $data);
             $this->load->view('templates/footer', $data);

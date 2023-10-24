@@ -18,6 +18,28 @@ class Asistencias_model extends CI_Model {
         return $query->num_rows();
     }
 
+    public function get_tot_asistencias()
+    {
+        $sql = 'select count(*) as tot_asistencias from asistencias ;';
+        $query = $this->db->query($sql);
+        return $query->row_array()['tot_asistencias'] ?? null ;
+    }
+
+    public function get_asistencia_antigua()
+    {
+        $sql = "select min(fecha::text || ' - ' || hora::text) as asistencia_antigua from asistencias";
+        $query = $this->db->query($sql);
+        return $query->row_array()['asistencia_antigua'] ?? null ;
+    }
+
+    public function get_asistencia_reciente()
+    {
+        $sql = "select max(fecha::text || ' - ' || hora::text) as asistencia_reciente from asistencias";
+        $query = $this->db->query($sql);
+        return $query->row_array()['asistencia_reciente'] ?? null ;
+    }
+
+
     public function guardar($data)
     {
         if ( !$this->existe($data) ) {
