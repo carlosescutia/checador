@@ -21,7 +21,7 @@ class Incidentes_model extends CI_Model {
 
     public function get_incidentes_empleado($cve_empleado, $mes, $anio, $tiempo_tolerancia)
     {
-        $sql = 'select ie.*, e.nom_empleado from incidentes(?, ?, ?) ie left join empleados e on ie.cve_empleado = e.cve_empleado where ie.cve_empleado = ?  order by ie.fecha';
+        $sql = 'select i.*, j.cve_justificante, j.tipo as tipo_justificante, jm.cve_justificante_masivo, jm.tipo as tipo_justificante_masivo from incidentes(?,?,?) i left join justificantes j on i.fecha = j.fecha and i.cve_empleado = j.cve_empleado left join justificantes_masivos jm on i.fecha = jm.fecha where i.cve_empleado = ? order by fecha';
         $query = $this->db->query($sql, array($mes, $anio, $tiempo_tolerancia, $cve_empleado));
         return $query->result_array();
     }

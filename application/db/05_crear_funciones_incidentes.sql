@@ -41,21 +41,21 @@ $$ language plpgsql strict immutable;
 /*
 Función asistencias_justificantes
 -----------------------
-Obtiene asistencias y justificantes por empleado en un mes y año
+Obtiene asistencias, vacaciones, justificantes individuales y justificantes masivos por empleado en un mes y año
 Utilizada en la función asistencias()
  */
 create or replace function asistencias_justificantes()
-returns table(cve_empleado int, fecha date, hora time, fuente text) as 
+returns table(cve_empleado int, fecha date, hora time) as 
 $$
 begin
     return query
 		select 
-			a.cve_empleado, a.fecha, a.hora, 'A' as fuente
+			a.cve_empleado, a.fecha, a.hora
 		from 
 			asistencias a 
 	union
 		( select 
-				j.cve_empleado, j.fecha, h.hora_entrada as hora, j.tipo as fuente
+				j.cve_empleado, j.fecha, h.hora_entrada as hora
 			from 
 				justificantes j 
 				left join empleados e on j.cve_empleado = e.cve_empleado 
@@ -64,7 +64,7 @@ begin
 				j.tipo in ('E','D','V')
 		union 
 			select 
-				j.cve_empleado, j.fecha, h.hora_salida as hora, j.tipo as fuente
+				j.cve_empleado, j.fecha, h.hora_salida as hora
 			from 
 				justificantes j 
 				left join empleados e on j.cve_empleado = e.cve_empleado 
@@ -75,7 +75,7 @@ begin
 		union
 		(
 		    select 
-                e.cve_empleado, jm.fecha, h.hora_entrada as hora, jm.tipo as fuente 
+                e.cve_empleado, jm.fecha, h.hora_entrada as hora
             from 
                 justificantes_masivos jm 
                 cross join empleados e 
@@ -85,7 +85,7 @@ begin
                 and e.activo = 1 
 		union
 		    select 
-                e.cve_empleado, jm.fecha, h.hora_salida as hora, jm.tipo as fuente 
+                e.cve_empleado, jm.fecha, h.hora_salida as hora
             from 
                 justificantes_masivos jm 
                 cross join empleados e 
@@ -179,6 +179,33 @@ begin
         asistencias(mes, anio) a 
         left join empleados e on a.cve_empleado = e.cve_empleado
         left join horarios h on e.cve_horario = h.cve_horario
+    ;
+end;
+$$ language plpgsql strict immutable;
+
+/*
+Función incidentes_justificados
+-----------------------
+Obtiene incidentes con informacion de justificantes por empleado en un mes y año
+ */
+create or replace function incidentes_justificados(mes varchar, anio varchar, tolerancia varchar)
+returns table(fecha date, cve_empleado int, hora_entrada time, hora_salida time, incidente text, cve_justificante int, tipo_justificante text, cve_justificante_masivo int, tipo_justificante_masivo text) as
+$$
+declare
+    fech_ini date;
+    fech_fin date;
+begin
+    fech_ini := anio || '-' || mes || '-01';
+    fech_fin := end_of_month(fech_ini);
+    return query
+    select 
+        i.fecha, i.cve_empleado, i.hora_entrada, i.hora_salida, i.incidente, j.cve_justificante, j.tipo as tipo_justificante, jm.cve_justificante_masivo, jm.tipo as tipo_justificante_masivo 
+    from 
+        incidentes(mes, anio, tolerancia) i 
+        left join justificantes j on i.fecha = j.fecha and i.cve_empleado = j.cve_empleado 
+        left join justificantes_masivos jm on i.fecha = jm.fecha 
+    order by 
+        fecha
     ;
 end;
 $$ language plpgsql strict immutable;
