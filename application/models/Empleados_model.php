@@ -11,6 +11,12 @@ class Empleados_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function get_empleados_activos() {
+        $sql = 'select e.*, h.desc_horario from empleados e left join horarios h on e.cve_horario = h.cve_horario where e.activo = 1 order by e.nom_empleado;';
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+
     public function get_empleado($cve_empleado) {
         $sql = 'select * from empleados where cve_empleado = ?;';
         $query = $this->db->query($sql, array($cve_empleado));

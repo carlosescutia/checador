@@ -5,14 +5,14 @@ class Incidentes_model extends CI_Model {
         parent::__construct();
     }
 
-    public function get_incidentes_empleados_todos($mes, $anio, $tiempo_tolerancia)
+    public function get_lista_incidentes_empleados_todos($mes, $anio, $tiempo_tolerancia)
     {
         $sql = 'select i.cve_empleado, e.cod_empleado, e.nom_empleado, h.desc_horario, count(i.incidente) as num_incidentes from incidentes(?,?,?) i left join empleados e on i.cve_empleado = e.cve_empleado left join horarios h on e.cve_horario = h.cve_horario group by i.cve_empleado, e.cod_empleado, e.nom_empleado, h.desc_horario order by e.nom_empleado';
         $query = $this->db->query($sql, array($mes, $anio, $tiempo_tolerancia));
         return $query->result_array();
     }
 
-    public function get_incidentes_empleados_pendientes($mes, $anio, $tiempo_tolerancia)
+    public function get_lista_incidentes_empleados_pendientes($mes, $anio, $tiempo_tolerancia)
     {
         $sql = 'select i.cve_empleado, e.cod_empleado, e.nom_empleado, h.desc_horario, count(i.incidente) as num_incidentes from incidentes(?,?,?) i left join empleados e on i.cve_empleado = e.cve_empleado left join horarios h on e.cve_horario = h.cve_horario where incidente is not null group by i.cve_empleado, e.cod_empleado, e.nom_empleado, h.desc_horario order by e.nom_empleado';
         $query = $this->db->query($sql, array($mes, $anio, $tiempo_tolerancia));
@@ -26,7 +26,14 @@ class Incidentes_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function get_incidentes_fechas($mes, $anio, $tiempo_tolerancia)
+    public function get_incidentes_empleados($mes, $anio, $tiempo_tolerancia)
+    {
+        $sql = 'select i.*, j.cve_justificante, j.tipo as tipo_justificante, jm.cve_justificante_masivo, jm.tipo as tipo_justificante_masivo from incidentes(?,?,?) i left join justificantes j on i.fecha = j.fecha and i.cve_empleado = j.cve_empleado left join justificantes_masivos jm on i.fecha = jm.fecha order by fecha';
+        $query = $this->db->query($sql, array($mes, $anio, $tiempo_tolerancia));
+        return $query->result_array();
+    }
+
+    public function get_lista_incidentes_fechas($mes, $anio, $tiempo_tolerancia)
     {
         $sql = 'select fecha, count(incidente) as num_incidentes from incidentes(?,?,?) where incidente is not null group by fecha order by fecha';
         $query = $this->db->query($sql, array($mes, $anio, $tiempo_tolerancia));

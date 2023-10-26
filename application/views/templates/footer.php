@@ -3,7 +3,7 @@
         <div class="footer_margin">
         </div>
 
-        <footer class="footer">
+        <footer class="footer d-print-none">
             <ul class="nav justify-content-center">
                 <li class="nav-item">&copy; <?= $anio_org_sitio ?? '2023' ?> <?= $nom_org_sitio ?? 'Organización' ?></li>
                 <li class="nav-item">&nbsp;</li>
