@@ -5,6 +5,8 @@
         <div class="row">
             <div class="col-md-6">
                 <h3>Listados</h3>
+                <?php include "btn_listado_asistencia_01.php"; ?>
+                <hr class="mb-5 mt-5">
                 <?php include "btn_listado_bitacora_01.php"; ?>
             </div>
             <div class="col-md-6">

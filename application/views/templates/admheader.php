@@ -25,9 +25,9 @@
 
     </head>
     <body>
-        <nav class="navbar navbar-expand-sm navbar-light fixed-top d-print-block pr-3">
+        <nav class="navbar navbar-expand-sm navbar-light fixed-top pr-3">
 
-            <div class="container-fluid">
+            <div class="container-fluid d-print-none">
                 <!-- logo -->
                 <div class="logo_menu">
                     <img class="logo" src="<?=base_url()?>img/<?= $logo_org_sitio ?? 'logotipo.png' ?>" class="d-inline-block align-top" alt="logo">

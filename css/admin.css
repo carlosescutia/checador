@@ -34,6 +34,18 @@ body a:hover {
     text-decoration: underline;
 }
 
+@media print {
+    body {
+        padding-top: 0;
+        margin-bottom: 0;
+    }
+
+    .page-break {
+        page-break-after: always;
+        break-after: always;
+    }
+}
+
 .alternate-color {
     background: #fff;
 }

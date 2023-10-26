@@ -10,7 +10,8 @@ class Reportes extends CI_Controller {
 		$this->load->model('bitacora_model');
         $this->load->model('parametros_sistema_model');
 
-		$this->load->model('asistencias_model');
+		$this->load->model('empleados_model');
+        $this->load->model('incidentes_model');
 	}
 
     public function get_userdata()
@@ -147,5 +148,50 @@ class Reportes extends CI_Controller {
             force_download("listado_bitacora_01.csv", $data);
         }
     }
+
+	public function listado_asistencia_01()
+	{
+		if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $data += $this->get_system_params();
+
+            $filtros = $this->input->post();
+            if ($filtros) {
+
+                $mes = $filtros['mes'];
+                $anio = $filtros['anio'];
+                $filtros_proyectos = array(
+                    'mes' => $mes,
+                    'anio' => $anio,
+                );
+                $this->session->set_userdata($filtros_proyectos);
+
+            } else {
+                if ($this->session->userdata('mes')) {
+                    $mes = $this->session->userdata('mes');
+                } else {
+                    $mes = date('m');
+                }
+                if ($this->session->userdata('anio')) {
+                    $anio = $this->session->userdata('anio');
+                } else {
+                    $anio = date('Y');
+                }
+			}
+            $data['mes'] = $mes;
+            $data['anio'] = $anio;
+            $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
+
+            $data['empleados'] = $this->empleados_model->get_empleados_activos();
+            $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados($mes, $anio, $tiempo_tolerancia);
+
+			$this->load->view('templates/admheader', $data);
+			$this->load->view('reportes/listado_asistencia_01', $data);
+			$this->load->view('templates/footer', $data);
+		} else {
+			redirect('admin/login');
+		}
+	}
 
 }

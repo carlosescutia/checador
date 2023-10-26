@@ -129,7 +129,7 @@ class Admin extends CI_Controller {
             $data['anio'] = $anio;
 
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
-            $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados_todos($mes, $anio, $tiempo_tolerancia);
+            $data['incidentes_empleados'] = $this->incidentes_model->get_lista_incidentes_empleados_todos($mes, $anio, $tiempo_tolerancia);
             $data['dias_inhabiles'] = $this->dias_inhabiles_model->get_dias_inhabiles();
             $data['justificantes_masivos'] = $this->justificantes_masivos_model->get_justificantes_masivos();
             $data['titulo'] = 'Incidentes de empleados activos';
@@ -177,7 +177,7 @@ class Admin extends CI_Controller {
             $data['anio'] = $anio;
 
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
-            $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados_pendientes($mes, $anio, $tiempo_tolerancia);
+            $data['incidentes_empleados'] = $this->incidentes_model->get_lista_incidentes_empleados_pendientes($mes, $anio, $tiempo_tolerancia);
             $data['dias_inhabiles'] = $this->dias_inhabiles_model->get_dias_inhabiles();
             $data['justificantes_masivos'] = $this->justificantes_masivos_model->get_justificantes_masivos();
             $data['titulo'] = 'Incidentes por empleado';
@@ -274,7 +274,7 @@ class Admin extends CI_Controller {
             $data['anio'] = $anio;
 
             $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
-            $data['incidentes_fechas'] = $this->incidentes_model->get_incidentes_fechas($mes, $anio, $tiempo_tolerancia);
+            $data['incidentes_fechas'] = $this->incidentes_model->get_lista_incidentes_fechas($mes, $anio, $tiempo_tolerancia);
             $data['dias_inhabiles'] = $this->dias_inhabiles_model->get_dias_inhabiles();
             $data['justificantes_masivos'] = $this->justificantes_masivos_model->get_justificantes_masivos();
 
