@@ -82,10 +82,6 @@ class Empleados extends CI_Controller {
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            if ($data['cve_rol'] != 'adm') {
-                redirect('admin');
-            }
-
             $data['horarios'] = $this->horarios_model->get_horarios();
 
             $this->load->view('templates/admheader', $data);

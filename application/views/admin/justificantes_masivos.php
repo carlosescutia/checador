@@ -19,15 +19,18 @@
                                     $item_eliminar = $justificantes_masivos_item['fecha'] . ' ' . $justificantes_masivos_item['desc_justificante_masivo']; 
                                     $url = base_url() . "justificantes_masivos/eliminar/". $justificantes_masivos_item['cve_justificante_masivo']; 
                                     ?>
-                                    <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
-                                    </a></p>
+                                    <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+                                    <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i></a></p>
+                                    <?php } ?>
                                 </div>
                             </div>
                             <?php } ?>
                         </div>
+                        <?php if (in_array('99', $accesos_sistema_rol)) { ?>
                         <div class="card-footer text-end">
                             <form method="post" action="<?= base_url() ?>justificantes_masivos/nuevo">
                                 <button type="submit" class="btn btn-primary">Nuevo</button>
                             </form>
                         </div>
+                        <?php } ?>
                     </div>

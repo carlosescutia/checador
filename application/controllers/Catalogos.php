@@ -49,10 +49,6 @@ class Catalogos extends CI_Controller {
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            if ($data['cve_rol'] != 'adm') {
-                redirect('admin');
-            }
-
             $this->load->view('templates/admheader', $data);
             $this->load->view('catalogos/lista', $data);
             $this->load->view('templates/footer', $data);

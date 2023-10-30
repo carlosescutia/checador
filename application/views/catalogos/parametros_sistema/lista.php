@@ -6,9 +6,11 @@
                     <h1 class="h2">Parámetros del sistema</h1>
                 </div>
                 <div class="col-sm-2 text-end">
+                    <?php if (in_array('99', $accesos_sistema_rol)) { ?>
                     <form method="post" action="<?= base_url() ?>parametros_sistema/nuevo">
                         <button type="submit" class="btn btn-primary">Nuevo</button>
                     </form>
+                    <?php } ?>
                 </div>
             </div>
         </div>
@@ -49,7 +51,9 @@
                             $item_eliminar = $parametros_sistema_item['nom_parametro_sistema']; 
                             $url = base_url() . "parametros_sistema/eliminar/". $parametros_sistema_item['cve_parametro_sistema']; 
                             ?>
+                            <?php if (in_array('99', $accesos_sistema_rol)) { ?>
                             <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
+                            <?php } ?>
                             </a></p>
                         </div>
                     </div>

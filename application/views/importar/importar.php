@@ -10,6 +10,7 @@
                 echo $error;
                 } ?>
             </div>
+            <?php if (in_array('99', $accesos_sistema_rol)) { ?>
             <div class="row mt-3 mb-3">
                 <div class="col-md-6">
                     <input type="file" class="form-control-file" name="subir_archivo">
@@ -18,6 +19,7 @@
                     <button type="submit" class="btn btn-success btn-sm">Verificar datos</button>
                 </div>
             </div>
+            <?php } ?>
             <input type="hidden" name="nombre_archivo" value="<?=$nombre_archivo?>">
         </form>
     </div>
@@ -70,9 +72,11 @@
                 echo $error;
                 } ?>
             </div>
+            <?php if (in_array('99', $accesos_sistema_rol)) { ?>
             <div class="col text-center">
                 <button type="submit" class="btn btn-primary">Importar datos</button>
             </div>
+            <?php } ?>
         </form>
     </div>
     <?php } ?>

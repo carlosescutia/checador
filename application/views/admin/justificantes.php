@@ -16,8 +16,9 @@
                                     $item_eliminar = date('d/m/Y', strtotime($justificantes_empleado_item['fecha'])) . ' - ' . $justificantes_empleado_item['tipo'];
                                     $url = base_url() . "justificantes/eliminar/". $justificantes_empleado_item['cve_justificante']; 
                                     ?>
-                                    <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
-                                    </a></p>
+                                    <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+                                    <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i></a></p>
+                                    <?php } ?>
                                 </div>
                             </div>
                             <?php } ?>
