@@ -8,9 +8,9 @@
                 <div class="col-md-10">
                     <h1 class="h2">Nuevo día inhábil</h1>
                 </div>
-                <div class="col-md-2 text-right">
-                    <button type="submit" class="btn btn-primary">Guardar</button>
+                <?php if (in_array('99', $accesos_sistema_rol)) { ?> <div class="col-md-2 text-right"> <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
+                <?php } ?>
             </div>
         </div>
 

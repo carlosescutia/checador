@@ -16,13 +16,16 @@
                                     $item_eliminar = date('d/m/Y', strtotime($vacaciones_empleado_item['fecha'])) . ' - ' . $vacaciones_empleado_item['tipo'];
                                     $url = base_url() . "justificantes/eliminar/". $vacaciones_empleado_item['cve_justificante']; 
                                     ?>
-                                    <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
-                                    </a></p>
+                                    <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+                                    <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i></a></p>
+                                    <?php } ?>
                                 </div>
                             </div>
                             <?php } ?>
                         </div>
+                        <?php if (in_array('99', $accesos_sistema_rol)) { ?>
                         <div class="card-footer text-end">
                             <a class="btn btn-primary btn-sm" href="<?=base_url()?>justificantes/nueva_vacacion/<?=$incidentes_empleado_item['cve_empleado']?>">Agregar</a>
                         </div>
+                        <?php } ?>
                     </div>

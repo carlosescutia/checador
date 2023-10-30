@@ -45,10 +45,6 @@ class Parametros_sistema extends CI_Controller {
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            if ($data['cve_rol'] != 'adm') {
-                redirect('admin');
-            }
-
             $data['parametros_sistema'] = $this->parametros_sistema_model->get_parametros_sistema();
 
             $this->load->view('templates/admheader', $data);
@@ -67,10 +63,6 @@ class Parametros_sistema extends CI_Controller {
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            if ($data['cve_rol'] != 'adm') {
-                redirect('admin');
-            }
-
             $data['parametros_sistema'] = $this->parametros_sistema_model->get_parametro_sistema_cve($cve_parametro_sistema);
 
             $this->load->view('templates/admheader', $data);
@@ -87,10 +79,6 @@ class Parametros_sistema extends CI_Controller {
             $data = [];
             $data += $this->get_userdata();
             $data += $this->get_system_params();
-
-            if ($data['cve_rol'] != 'adm') {
-                redirect('admin');
-            }
 
             $this->load->view('templates/admheader', $data);
             $this->load->view('catalogos/parametros_sistema/nuevo', $data);

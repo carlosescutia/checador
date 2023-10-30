@@ -79,10 +79,6 @@ class Justificantes extends CI_Controller {
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            if ($data['cve_rol'] != 'adm') {
-                redirect('admin');
-            }
-
             $data['cve_empleado'] = $cve_empleado ;
 
             $this->load->view('templates/admheader', $data);
@@ -99,10 +95,6 @@ class Justificantes extends CI_Controller {
             $data = [];
             $data += $this->get_userdata();
             $data += $this->get_system_params();
-
-            if ($data['cve_rol'] != 'adm') {
-                redirect('admin');
-            }
 
             $data['cve_empleado'] = $cve_empleado ;
             $data['fecha'] = $fecha ;

@@ -7,21 +7,22 @@
             <h2>Aplicación</h2>
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <?php include "organizaciones/boton.php" ?>
+                    <?php if (in_array('501', $accesos_sistema_rol)) include "empleados/boton.php"; ?>
                 </div>
                 <div class="col-md-4">
-                    <?php include "empleados/boton.php" ?>
+                    <?php if (in_array('502', $accesos_sistema_rol)) include "horarios/boton.php"; ?>
                 </div>
                 <div class="col-md-4">
-                    <?php include "parametros_sistema/boton.php" ?>
+                    <?php if (in_array('503', $accesos_sistema_rol)) include "parametros_sistema/boton.php"; ?>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <?php include "horarios/boton.php" ?>
+                    <?php if (in_array('504', $accesos_sistema_rol)) include "organizaciones/boton.php"; ?>
                 </div>
             </div>
         </div>
+        <?php if ($cve_rol == 'adm') { ?>
         <div class="col-md-3 p-3 border bg-light">
             <h2>Sistema</h2>
             <div class="row mb-3">
@@ -50,5 +51,6 @@
                 </div>
             </div>
         </div>
+        <?php } ?>
     </div>
 </main>

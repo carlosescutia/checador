@@ -7,9 +7,11 @@
                 <div class="col-md-10">
                     <h1 class="h2">Editar parámetro del sistema</h1>
                 </div>
+                <?php if (in_array('99', $accesos_sistema_rol)) { ?>
                 <div class="col-md-2 text-end">
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
+                <?php } ?>
             </div>
         </div>
 

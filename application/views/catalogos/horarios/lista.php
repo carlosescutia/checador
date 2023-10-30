@@ -6,9 +6,11 @@
                     <h1 class="h2">Horarios</h1>
                 </div>
                 <div class="col-sm-2 text-right">
+                    <?php if (in_array('99', $accesos_sistema_rol)) { ?>
                     <form method="post" action="<?= base_url() ?>horarios/nuevo">
                         <button type="submit" class="btn btn-primary">Nuevo</button>
                     </form>
+                    <?php } ?>
                 </div>
             </div>
         </div>
@@ -49,7 +51,9 @@
                             $item_eliminar = $horarios_item['cve_horario'] . ' '. $horarios_item['desc_horario']; 
                             $url = base_url() . "horarios/eliminar/". $horarios_item['cve_horario']; 
                             ?>
+                            <?php if (in_array('99', $accesos_sistema_rol)) { ?>
                             <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
+                            <?php } ?>
                             </a></p>
                         </div>
                     </div>

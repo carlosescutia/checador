@@ -6,9 +6,11 @@
                     <h1 class="h2">Empleados</h1>
                 </div>
                 <div class="col-sm-2 text-right">
+                    <?php if (in_array('99', $accesos_sistema_rol)) { ?>
                     <form method="post" action="<?= base_url() ?>empleados/nuevo">
                         <button type="submit" class="btn btn-primary">Nuevo</button>
                     </form>
+                    <?php } ?>
                 </div>
             </div>
         </div>
@@ -55,8 +57,9 @@
                             $item_eliminar = $empleados_item['nom_empleado']; 
                             $url = base_url() . "empleados/eliminar/". $empleados_item['cve_empleado']; 
                             ?>
-                            <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
-                            </a></p>
+                            <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+                            <p><a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i></a></p>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>

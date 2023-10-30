@@ -46,7 +46,11 @@
                             <p><?= $incidentes_empleado_item['hora_salida'] ?></p>
                         </div>
                         <div class="col-sm-3 align-self-center">
-                            <p><a href="<?=base_url()?>justificantes/nuevo_justificante/<?=$incidentes_empleado_item['cve_empleado']?>/<?=$incidentes_empleado_item['fecha']?>"><?= $incidentes_empleado_item['incidente'] ?></a></p>
+                            <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+                                <p><a href="<?=base_url()?>justificantes/nuevo_justificante/<?=$incidentes_empleado_item['cve_empleado']?>/<?=$incidentes_empleado_item['fecha']?>"><?= $incidentes_empleado_item['incidente'] ?></a></p>
+                            <?php } else { ?>
+                                <p><?= $incidentes_empleado_item['incidente'] ?></p>
+                            <?php } ?>
                         </div>
                         <div class="col-sm-3 align-self-center">
                             <?php 
