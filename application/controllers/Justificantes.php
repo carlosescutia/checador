@@ -89,7 +89,7 @@ class Justificantes extends CI_Controller {
         }
     }
 
-    public function nuevo_justificante($cve_empleado, $fecha)
+    public function nuevo_justificante($cve_empleado, $fecha=null)
     {
         if ($this->session->userdata('logueado')) {
             $data = [];
