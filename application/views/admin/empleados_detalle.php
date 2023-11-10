@@ -40,10 +40,10 @@
                             <p><span><?= get_nom_dia($incidentes_empleado_item['fecha']) ?></span>&nbsp;<?= date('d/m/y', strtotime($incidentes_empleado_item['fecha'])) ?></p>
                         </div>
                         <div class="col-sm-2 align-self-center">
-                            <p><?= $incidentes_empleado_item['hora_entrada'] ?></p>
+                            <p><?= $incidentes_empleado_item['hora_entrada_real'] ?></p>
                         </div>
                         <div class="col-sm-2 align-self-center">
-                            <p><?= $incidentes_empleado_item['hora_salida'] ?></p>
+                            <p><?= $incidentes_empleado_item['hora_salida_real'] ?></p>
                         </div>
                         <div class="col-sm-3 align-self-center">
                             <?php if (in_array('99', $accesos_sistema_rol)) { ?>
