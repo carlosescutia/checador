@@ -16,7 +16,7 @@
     <div class="card mt-0 mb-3 border-0">
         <div class="card-body">
             <div class="row">
-                <div class="col-sm-6 offset-sm-1">
+                <div class="col-sm-7">
                     <div class="row">
                         <div class="col-sm-2 align-self-center">
                             <p class="fw-bold">Fecha</p>
@@ -37,7 +37,7 @@
                     <?php foreach ($incidentes_empleado as $incidentes_empleado_item) { ?>
                     <div class="row alternate-color">
                         <div class="col-sm-2 align-self-center">
-                            <p><?= date('d/m/Y', strtotime($incidentes_empleado_item['fecha'])) ?></p>
+                            <p><span><?= get_nom_dia($incidentes_empleado_item['fecha']) ?></span>&nbsp;<?= date('d/m/y', strtotime($incidentes_empleado_item['fecha'])) ?></p>
                         </div>
                         <div class="col-sm-2 align-self-center">
                             <p><?= $incidentes_empleado_item['hora_entrada'] ?></p>
