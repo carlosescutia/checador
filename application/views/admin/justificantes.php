@@ -23,4 +23,9 @@
                             </div>
                             <?php } ?>
                         </div>
+                        <?php if (in_array('99', $accesos_sistema_rol)) { ?>
+                        <div class="card-footer text-end">
+                            <a class="btn btn-primary btn-sm" href="<?=base_url()?>justificantes/nuevo_justificante/<?=$incidentes_empleado_item['cve_empleado']?>">Agregar</a>
+                        </div>
+                        <?php } ?>
                     </div>

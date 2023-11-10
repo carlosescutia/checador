@@ -19,7 +19,7 @@
             <div class="form-group row">
                 <label for="fecha" class="col-sm-2 col-form-label">Fecha</label>
                 <div class="col-sm-4">
-                    <input type="date" class="form-control" name="fecha" id="fecha" value="<?= $fecha ?>" disabled>
+                <input type="date" class="form-control <?= empty($fecha) ? '' : 'bg-dark-subtle'?>" name="fecha" id="fecha" value="<?= $fecha ?>" <?= empty($fecha) ? '' : 'readonly'?> >
                 </div>
             </div>
             <div class="form-group row">
@@ -41,7 +41,6 @@
         </div>
 
         <input type="hidden" name="cve_empleado" id="cve_empleado" value="<?=$cve_empleado?>">
-        <input type="hidden" name="fecha" id="fecha" value="<?=$fecha?>">
 
     </form>
 
