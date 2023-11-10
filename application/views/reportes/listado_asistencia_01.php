@@ -44,7 +44,7 @@
         <div class="row">
             <div class="col-md-12">
                 <?php foreach ($empleados as $empleados_item) { ?>
-                <h4 class="bg-secondary text-white py-2"><?= $empleados_item['nom_empleado'] ?> - Asistencia de <?=$mes?>/<?= $anio ?></h4>
+                <h4 class="bg-secondary text-white py-2"><?= $empleados_item['nom_empleado'] ?> - Asistencia de <?=get_nombre_mes($mes)?> <?= $anio ?></h4>
                     <div class="card mt-0 mb-3 border-0">
                         <div class="card-body">
                             <div class="row">
@@ -73,7 +73,7 @@
                                     ?>
                                     <div class="row alternate-color">
                                         <div class="col-sm-2 align-self-center">
-                                            <p><?= date('d/m/Y', strtotime($incidentes_empleados_item['fecha'])) ?></p>
+                                            <p><span><?= get_nom_dia($incidentes_empleados_item['fecha']) ?></span>&nbsp;<?= date('d/m/Y', strtotime($incidentes_empleados_item['fecha'])) ?></p>
                                         </div>
                                         <div class="col-sm-2 align-self-center">
                                             <p><?= $incidentes_empleados_item['hora_entrada'] ?></p>
