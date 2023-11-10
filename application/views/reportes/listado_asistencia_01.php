@@ -76,10 +76,10 @@
                                             <p><span><?= get_nom_dia($incidentes_empleados_item['fecha']) ?></span>&nbsp;<?= date('d/m/Y', strtotime($incidentes_empleados_item['fecha'])) ?></p>
                                         </div>
                                         <div class="col-sm-2 align-self-center">
-                                            <p><?= $incidentes_empleados_item['hora_entrada'] ?></p>
+                                            <p><?= $incidentes_empleados_item['hora_entrada_real'] ?></p>
                                         </div>
                                         <div class="col-sm-2 align-self-center">
-                                            <p><?= $incidentes_empleados_item['hora_salida'] ?></p>
+                                            <p><?= $incidentes_empleados_item['hora_salida_real'] ?></p>
                                         </div>
                                         <div class="col-sm-3 align-self-center">
                                             <p><?= $incidentes_empleados_item['incidente'] ?></p>

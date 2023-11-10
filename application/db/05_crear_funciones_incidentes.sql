@@ -104,7 +104,7 @@ Función asistencias
 Obtiene asistencias (entrada y salida) por empleado en un mes y año
  */
 create or replace function asistencias(mes varchar, anio varchar)
-returns table(fecha date, cve_empleado int, hora_entrada time, hora_salida time) as 
+returns table(fecha date, cve_empleado int, hora_entrada time, hora_salida time, hora_entrada_real time, hora_salida_real time) as 
 $$
 declare
     fech_ini date;
@@ -113,12 +113,30 @@ begin
     fech_ini := anio || '-' || mes || '-01';
     fech_fin := end_of_month(fech_ini);
     return query
+
     select 
-        distinct dh.fecha, e.cve_empleado, min(a.hora) as hora_entrada, max(a.hora) as hora_salida
+        distinct dh.fecha, e.cve_empleado, min(aj.hora) as hora_entrada, max(aj.hora) as hora_salida, 
+        (case 
+            when min(a.hora) = max(a.hora) then
+                case 
+                    when min(a.hora) < '12:00' then min(a.hora)
+                    when min(a.hora) > '12:00' then null
+                end
+            else min(a.hora)
+        end) as hora_entrada_real,
+        (case 
+            when min(a.hora) = max(a.hora) then
+                case 
+                    when max(a.hora) > '12:00' then max(a.hora)
+                    when max(a.hora) < '12:00' then null
+                end
+            else max(a.hora)
+        end) as hora_salida_real
     from 
         dias_habiles(mes, anio) dh 
         cross join empleados e 
-        left join asistencias_justificantes() a on dh.fecha = a.fecha and e.cve_empleado = a.cve_empleado
+        left join asistencias_justificantes() aj on dh.fecha = aj.fecha and e.cve_empleado = aj.cve_empleado
+        left join asistencias a on dh.fecha = a.fecha and e.cve_empleado = a.cve_empleado
     where
         e.activo = 1
     group by
@@ -133,7 +151,7 @@ Función incidentes
 Obtiene incidentes por empleado en un mes y año
  */
 create or replace function incidentes(mes varchar, anio varchar, tolerancia varchar)
-returns table(fecha date, cve_empleado int, hora_entrada time, hora_salida time, incidente text) as 
+returns table(fecha date, cve_empleado int, hora_entrada time, hora_salida time, hora_entrada_real time, hora_salida_real time, incidente text) as 
 $$
 declare
     fech_ini date;
@@ -143,7 +161,7 @@ begin
     fech_fin := end_of_month(fech_ini);
     return query
     select
-        a.fecha, a.cve_empleado, a.hora_entrada, a.hora_salida, 
+        a.fecha, a.cve_empleado, a.hora_entrada, a.hora_salida, a.hora_entrada_real, a.hora_salida_real,
         (select
             (case when a.hora_entrada is not null then
                 (case when a.hora_entrada <> a.hora_salida then
@@ -189,7 +207,7 @@ Función incidentes_justificados
 Obtiene incidentes con informacion de justificantes por empleado en un mes y año
  */
 create or replace function incidentes_justificados(mes varchar, anio varchar, tolerancia varchar)
-returns table(fecha date, cve_empleado int, hora_entrada time, hora_salida time, incidente text, cve_justificante int, tipo_justificante text, cve_justificante_masivo int, tipo_justificante_masivo text) as
+returns table(fecha date, cve_empleado int, hora_entrada time, hora_salida time, hora_entrada_real time, hora_salida_real time, incidente text, cve_justificante int, tipo_justificante text, cve_justificante_masivo int, tipo_justificante_masivo text) as
 $$
 declare
     fech_ini date;
@@ -199,7 +217,7 @@ begin
     fech_fin := end_of_month(fech_ini);
     return query
     select 
-        i.fecha, i.cve_empleado, i.hora_entrada, i.hora_salida, i.incidente, j.cve_justificante, j.tipo as tipo_justificante, jm.cve_justificante_masivo, jm.tipo as tipo_justificante_masivo 
+        i.fecha, i.cve_empleado, i.hora_entrada, i.hora_salida, i.hora_entrada_real, i.hora_salida_real, i.incidente, j.cve_justificante, j.tipo as tipo_justificante, jm.cve_justificante_masivo, jm.tipo as tipo_justificante_masivo 
     from 
         incidentes(mes, anio, tolerancia) i 
         left join justificantes j on i.fecha = j.fecha and i.cve_empleado = j.cve_empleado 
