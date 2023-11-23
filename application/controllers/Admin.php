@@ -79,11 +79,12 @@ class Admin extends CI_Controller {
             $data['mes'] = $mes;
             $data['anio'] = $anio;
 
-            $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
-            $data['tot_incidentes'] = $this->incidentes_model->get_tot_incidentes($mes, $anio, $tiempo_tolerancia);
-            $data['tot_empleados_incidentes'] = $this->incidentes_model->get_tot_empleados_incidentes($mes, $anio, $tiempo_tolerancia);
+            $tolerancia_retardo = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_retardo');
+            $tolerancia_asistencia = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_asistencia');
+            $data['tot_incidentes'] = $this->incidentes_model->get_tot_incidentes($mes, $anio, $tolerancia_retardo, $tolerancia_asistencia);
+            $data['tot_empleados_incidentes'] = $this->incidentes_model->get_tot_empleados_incidentes($mes, $anio, $tolerancia_retardo, $tolerancia_asistencia);
             $data['tot_dias_habiles'] = $this->incidentes_model->get_tot_dias_habiles($mes, $anio);
-            $data['tot_dias_incidentes'] = $this->incidentes_model->get_tot_dias_incidentes($mes, $anio, $tiempo_tolerancia);
+            $data['tot_dias_incidentes'] = $this->incidentes_model->get_tot_dias_incidentes($mes, $anio, $tolerancia_retardo, $tolerancia_asistencia);
             $data['tot_dias_info'] = $this->incidentes_model->get_tot_dias_info($mes, $anio);
 
 
@@ -128,8 +129,9 @@ class Admin extends CI_Controller {
             $data['mes'] = $mes;
             $data['anio'] = $anio;
 
-            $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
-            $data['incidentes_empleados'] = $this->incidentes_model->get_lista_incidentes_empleados_todos($mes, $anio, $tiempo_tolerancia);
+            $tolerancia_retardo = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_retardo');
+            $tolerancia_asistencia = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_asistencia');
+            $data['incidentes_empleados'] = $this->incidentes_model->get_lista_incidentes_empleados_todos($mes, $anio, $tolerancia_retardo, $tolerancia_asistencia);
             $data['dias_inhabiles'] = $this->dias_inhabiles_model->get_dias_inhabiles();
             $data['justificantes_masivos'] = $this->justificantes_masivos_model->get_justificantes_masivos();
             $data['titulo'] = 'Incidentes de empleados activos';
@@ -176,8 +178,9 @@ class Admin extends CI_Controller {
             $data['mes'] = $mes;
             $data['anio'] = $anio;
 
-            $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
-            $data['incidentes_empleados'] = $this->incidentes_model->get_lista_incidentes_empleados_pendientes($mes, $anio, $tiempo_tolerancia);
+            $tolerancia_retardo = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_retardo');
+            $tolerancia_asistencia = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_asistencia');
+            $data['incidentes_empleados'] = $this->incidentes_model->get_lista_incidentes_empleados_pendientes($mes, $anio, $tolerancia_retardo, $tolerancia_asistencia);
             $data['dias_inhabiles'] = $this->dias_inhabiles_model->get_dias_inhabiles();
             $data['justificantes_masivos'] = $this->justificantes_masivos_model->get_justificantes_masivos();
             $data['titulo'] = 'Incidentes por empleado';
@@ -226,8 +229,9 @@ class Admin extends CI_Controller {
             $data['mes'] = $mes;
             $data['anio'] = $anio;
 
-            $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
-            $data['incidentes_empleado'] = $this->incidentes_model->get_incidentes_empleado($cve_empleado, $mes, $anio, $tiempo_tolerancia);
+            $tolerancia_retardo = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_retardo');
+            $tolerancia_asistencia = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_asistencia');
+            $data['incidentes_empleado'] = $this->incidentes_model->get_incidentes_empleado($cve_empleado, $mes, $anio, $tolerancia_retardo, $tolerancia_asistencia);
             $data['vacaciones_empleado'] = $this->justificantes_model->get_vacaciones_empleado($anio, $cve_empleado);
             $data['justificantes_empleado'] = $this->justificantes_model->get_justificantes_empleado($mes, $anio, $cve_empleado);
 
@@ -273,8 +277,9 @@ class Admin extends CI_Controller {
             $data['mes'] = $mes;
             $data['anio'] = $anio;
 
-            $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
-            $data['incidentes_fechas'] = $this->incidentes_model->get_lista_incidentes_fechas($mes, $anio, $tiempo_tolerancia);
+            $tolerancia_retardo = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_retardo');
+            $tolerancia_asistencia = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_asistencia');
+            $data['incidentes_fechas'] = $this->incidentes_model->get_lista_incidentes_fechas($mes, $anio, $tolerancia_retardo, $tolerancia_asistencia);
             $data['dias_inhabiles'] = $this->dias_inhabiles_model->get_dias_inhabiles();
             $data['justificantes_masivos'] = $this->justificantes_masivos_model->get_justificantes_masivos();
 
@@ -320,8 +325,9 @@ class Admin extends CI_Controller {
             $data['mes'] = $mes;
             $data['anio'] = $anio;
 
-            $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
-            $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_fecha($fecha, $mes, $anio, $tiempo_tolerancia);
+            $tolerancia_retardo = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_retardo');
+            $tolerancia_asistencia = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_asistencia');
+            $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_fecha($fecha, $mes, $anio, $tolerancia_retardo, $tolerancia_asistencia);
             $data['dias_inhabiles'] = $this->dias_inhabiles_model->get_dias_inhabiles();
             $data['justificantes_masivos'] = $this->justificantes_masivos_model->get_justificantes_masivos();
             $data['titulo'] = 'Incidentes del día ' . date('d/m/Y', strtotime($fecha));
