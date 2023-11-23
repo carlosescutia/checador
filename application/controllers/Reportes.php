@@ -181,10 +181,11 @@ class Reportes extends CI_Controller {
 			}
             $data['mes'] = $mes;
             $data['anio'] = $anio;
-            $tiempo_tolerancia = $this->parametros_sistema_model->get_parametro_sistema_nom('tiempo_tolerancia');
+            $tolerancia_retardo = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_retardo');
+            $tolerancia_asistencia = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_asistencia');
 
             $data['empleados'] = $this->empleados_model->get_empleados_activos();
-            $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados($mes, $anio, $tiempo_tolerancia);
+            $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados($mes, $anio, $tolerancia_retardo, $tolerancia_asistencia);
 
 			$this->load->view('templates/admheader', $data);
 			$this->load->view('reportes/listado_asistencia_01', $data);

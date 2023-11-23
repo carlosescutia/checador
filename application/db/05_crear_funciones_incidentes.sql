@@ -150,7 +150,7 @@ Función incidentes
 -----------------------
 Obtiene incidentes por empleado en un mes y año
  */
-create or replace function incidentes(mes varchar, anio varchar, tolerancia varchar)
+create or replace function incidentes(mes varchar, anio varchar, tolerancia_retardo varchar, tolerancia_asistencia varchar)
 returns table(fecha date, cve_empleado int, hora_entrada time, hora_salida time, hora_entrada_real time, hora_salida_real time, incidente text) as 
 $$
 declare
@@ -163,36 +163,48 @@ begin
     select
         a.fecha, a.cve_empleado, a.hora_entrada, a.hora_salida, a.hora_entrada_real, a.hora_salida_real,
         (select
-            (case when a.hora_entrada is not null then
-                (case when a.hora_entrada <> a.hora_salida then
-                    (case 
-                        when a.hora_entrada > h.hora_entrada + tolerancia::interval then 
-                            (case when a.hora_salida < h.hora_salida then
-                                'entrada tarde, salida temprano'
+            case when a.hora_entrada is not null then
+                case when a.hora_entrada <> a.hora_salida then
+                    case 
+                        when date_trunc('minute', a.hora_entrada) > h.hora_entrada + tolerancia_retardo::interval then 
+                            case when date_trunc('minute', a.hora_entrada) <= h.hora_entrada + tolerancia_asistencia::interval then 
+                                case when a.hora_salida < h.hora_salida then
+                                    'retardo, salida temprano'
+                                else
+                                    'retardo'
+                                end
                             else
-                                'entrada tarde'
-                            end)
+                                case when a.hora_salida < h.hora_salida then
+                                    'entrada tardía, salida temprano'
+                                else
+                                    'entrada tardía'
+                                end
+                            end
                         when a.hora_salida < h.hora_salida then 'salida temprano'
-                    end)
+                    end
                 else
-                    (case when a.hora_entrada > '12:00' then
-                        (case when a.hora_salida < h.hora_salida then 
+                    case when a.hora_entrada > '12:00' then
+                        case when a.hora_salida < h.hora_salida then 
                             'sin entrada, salida temprano'
                         else 
                             'sin entrada' 
-                        end)
+                        end
                     else
-                        (case when a.hora_entrada > h.hora_entrada + tolerancia::interval then 
-                            'entrada tarde, sin salida'
+                        case when date_trunc('minute', a.hora_entrada) > h.hora_entrada + tolerancia_retardo::interval then 
+                            case when date_trunc('minute', a.hora_entrada) <= h.hora_entrada + tolerancia_asistencia::interval then 
+                                'retardo, sin salida'
+                            else
+                                'entrada tardía, sin salida'
+                            end
                         else
                             'sin salida'
-                        end)
-                    end)
-                end)
+                        end
+                    end
+                end
             else
-                case when a.fecha < now() then 'sin asistencia' end
-            end)
-        )as incidente
+                case when a.fecha < now() then 'inasistencia' end
+            end
+        ) as incidente
     from 
         asistencias(mes, anio) a 
         left join empleados e on a.cve_empleado = e.cve_empleado
@@ -206,7 +218,7 @@ Función incidentes_justificados
 -----------------------
 Obtiene incidentes con informacion de justificantes por empleado en un mes y año
  */
-create or replace function incidentes_justificados(mes varchar, anio varchar, tolerancia varchar)
+create or replace function incidentes_justificados(mes varchar, anio varchar, tolerancia_retardo varchar, tolerancia_asistencia varchar)
 returns table(fecha date, cve_empleado int, hora_entrada time, hora_salida time, hora_entrada_real time, hora_salida_real time, incidente text, cve_justificante int, tipo_justificante text, cve_justificante_masivo int, tipo_justificante_masivo text) as
 $$
 declare
@@ -219,7 +231,7 @@ begin
     select 
         i.fecha, i.cve_empleado, i.hora_entrada, i.hora_salida, i.hora_entrada_real, i.hora_salida_real, i.incidente, j.cve_justificante, j.tipo as tipo_justificante, jm.cve_justificante_masivo, jm.tipo as tipo_justificante_masivo 
     from 
-        incidentes(mes, anio, tolerancia) i 
+        incidentes(mes, anio, tolerancia_retardo, tolerancia_asistencia) i 
         left join justificantes j on i.fecha = j.fecha and i.cve_empleado = j.cve_empleado 
         left join justificantes_masivos jm on i.fecha = jm.fecha 
     order by 

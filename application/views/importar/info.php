@@ -35,8 +35,12 @@
                             <td class="text-center"><?=$dias_cargar?></td>
                         </tr>
                         <tr>
-                            <td>Tiempo de tolerancia</td>
-                            <td class="text-center"><?=$tiempo_tolerancia?></td>
+                            <td>Tolerancia de retardo</td>
+                            <td class="text-center"><?=$tolerancia_retardo?></td>
+                        </tr>
+                        <tr>
+                            <td>Tolerancia de asistencia</td>
+                            <td class="text-center"><?=$tolerancia_asistencia?></td>
                         </tr>
                     </tbody>
                 </table>
