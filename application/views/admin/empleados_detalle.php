@@ -88,6 +88,10 @@
                                         $texto = "Dia masivo justificado" ;
                                         break;
                                 }
+                                if ($incidentes_empleado_item['cve_dia_inhabil']) {
+                                    $url = base_url() . "dias_inhabiles/detalle/" . $incidentes_empleado_item['cve_dia_inhabil'] ;
+                                    $texto = $incidentes_empleado_item['desc_dia_inhabil'] ;
+                                }
                             ?>
                             <p><a href="<?=$url?>"><?=$texto?></a></p>
                         </div>

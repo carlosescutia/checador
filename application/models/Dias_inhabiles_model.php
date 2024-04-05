@@ -5,9 +5,9 @@ class Dias_inhabiles_model extends CI_Model {
         parent::__construct();
     }
 
-    public function get_dias_inhabiles() {
-        $sql = 'select dh.* from dias_inhabiles dh order by dh.fecha';
-        $query = $this->db->query($sql);
+    public function get_dias_inhabiles($anio) {
+        $sql = 'select dh.* from dias_inhabiles dh where extract(year from dh.fecha)::varchar = ? order by dh.fecha';
+        $query = $this->db->query($sql, array($anio));
         return $query->result_array();
     }
 

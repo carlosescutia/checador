@@ -14,7 +14,7 @@ $$ language 'sql' immutable strict;
 Función dias_habiles(mes, anio)
 -----------------------
 Genera tabla con los dias habiles del mes 
-excluyendo fines de semana y dias en tabla dias_inhabiles
+excluyendo fines de semana
  */
 create or replace function dias_habiles(mes varchar, anio varchar)
 returns table (fecha date) as 
@@ -32,7 +32,6 @@ begin
 		generate_series(fech_ini, fech_fin, interval '1' day) as t(dt)
 	where
 		extract(dow from dt) between 1 and 5 
-		and dt not in (select di.fecha from dias_inhabiles di where extract(month from di.fecha)::varchar = mes and extract(year from di.fecha)::varchar = anio)
 	;
 
 end; 
@@ -41,7 +40,7 @@ $$ language plpgsql strict immutable;
 /*
 Función asistencias_justificantes
 -----------------------
-Obtiene asistencias, vacaciones, justificantes individuales y justificantes masivos por empleado en un mes y año
+Obtiene asistencias, vacaciones, justificantes individuales, justificantes masivos y dias inhabiles por empleado en un mes y año
 Utilizada en la función asistencias()
  */
 create or replace function asistencias_justificantes()
@@ -49,32 +48,32 @@ returns table(cve_empleado int, fecha date, hora time) as
 $$
 begin
     return query
-		select 
-			a.cve_empleado, a.fecha, a.hora
-		from 
-			asistencias a 
+        select 
+            a.cve_empleado, a.fecha, a.hora
+        from 
+            asistencias a 
 	union
-		( select 
-				j.cve_empleado, j.fecha, h.hora_entrada as hora
-			from 
-				justificantes j 
-				left join empleados e on j.cve_empleado = e.cve_empleado 
-				left join horarios h on e.cve_horario = h.cve_horario 
-			where 
-				j.tipo in ('E','D','V')
-		union 
-			select 
-				j.cve_empleado, j.fecha, h.hora_salida as hora
-			from 
-				justificantes j 
-				left join empleados e on j.cve_empleado = e.cve_empleado 
-				left join horarios h on e.cve_horario = h.cve_horario 
-			where 
-				j.tipo in ('S','D','V')
-		)
-		union
-		(
-		    select 
+        ( select 
+                j.cve_empleado, j.fecha, h.hora_entrada as hora
+            from 
+                justificantes j 
+                left join empleados e on j.cve_empleado = e.cve_empleado 
+                left join horarios h on e.cve_horario = h.cve_horario 
+            where 
+                j.tipo in ('E','D','V')
+        union 
+            select 
+                j.cve_empleado, j.fecha, h.hora_salida as hora
+            from 
+                justificantes j 
+                left join empleados e on j.cve_empleado = e.cve_empleado 
+                left join horarios h on e.cve_horario = h.cve_horario 
+            where 
+                j.tipo in ('S','D','V')
+        )
+    union
+        (
+            select 
                 e.cve_empleado, jm.fecha, h.hora_entrada as hora
             from 
                 justificantes_masivos jm 
@@ -83,8 +82,8 @@ begin
             where 
                 jm.tipo in ('E','D')
                 and e.activo = 1 
-		union
-		    select 
+        union
+            select 
                 e.cve_empleado, jm.fecha, h.hora_salida as hora
             from 
                 justificantes_masivos jm 
@@ -93,7 +92,27 @@ begin
             where 
                 jm.tipo in ('S','D')
                 and e.activo = 1 
-		) 
+        ) 
+    union
+        (
+            select 
+                e.cve_empleado, di.fecha, h.hora_entrada as hora
+            from 
+                dias_inhabiles di
+                cross join empleados e 
+                left join horarios h on e.cve_horario = h.cve_horario 
+            where 
+                e.activo = 1 
+        union
+            select 
+                e.cve_empleado, di.fecha, h.hora_salida as hora
+            from 
+                dias_inhabiles di
+                cross join empleados e 
+                left join horarios h on e.cve_horario = h.cve_horario 
+            where 
+                e.activo = 1 
+        ) 
     ;
 end;
 $$ language plpgsql strict immutable;
