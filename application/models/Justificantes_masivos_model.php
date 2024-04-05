@@ -5,9 +5,9 @@ class Justificantes_masivos_model extends CI_Model {
         parent::__construct();
     }
 
-    public function get_justificantes_masivos() {
-        $sql = 'select jm.* from justificantes_masivos jm order by fecha';
-        $query = $this->db->query($sql);
+    public function get_justificantes_masivos($mes, $anio) {
+        $sql = 'select jm.* from justificantes_masivos jm where extract(month from jm.fecha)::varchar = ? and extract(year from jm.fecha)::varchar = ? order by fecha';
+        $query = $this->db->query($sql, array($mes, $anio));
         return $query->result_array();
     }
 
