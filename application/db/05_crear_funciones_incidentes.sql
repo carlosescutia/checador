@@ -33,228 +33,155 @@ begin
 	where
 		extract(dow from dt) between 1 and 5 
 	;
-
 end; 
 $$ language plpgsql strict immutable;
 
-/*
-Función asistencias_justificantes
------------------------
-Obtiene asistencias, vacaciones, justificantes individuales, justificantes masivos y dias inhabiles por empleado en un mes y año
-Utilizada en la función asistencias()
- */
-create or replace function asistencias_justificantes()
-returns table(cve_empleado int, fecha date, hora time) as 
-$$
-begin
-    return query
-        select 
-            a.cve_empleado, a.fecha, a.hora
-        from 
-            asistencias a 
-	union
-        ( select 
-                j.cve_empleado, j.fecha, h.hora_entrada as hora
-            from 
-                justificantes j 
-                left join empleados e on j.cve_empleado = e.cve_empleado 
-                left join horarios h on e.cve_horario = h.cve_horario 
-            where 
-                j.tipo in ('E','D','V')
-        union 
-            select 
-                j.cve_empleado, j.fecha, h.hora_salida as hora
-            from 
-                justificantes j 
-                left join empleados e on j.cve_empleado = e.cve_empleado 
-                left join horarios h on e.cve_horario = h.cve_horario 
-            where 
-                j.tipo in ('S','D','V')
-        )
-    union
-        (
-            select 
-                e.cve_empleado, jm.fecha, h.hora_entrada as hora
-            from 
-                justificantes_masivos jm 
-                cross join empleados e 
-                left join horarios h on e.cve_horario = h.cve_horario 
-            where 
-                jm.tipo in ('E','D')
-                and e.activo = 1 
-        union
-            select 
-                e.cve_empleado, jm.fecha, h.hora_salida as hora
-            from 
-                justificantes_masivos jm 
-                cross join empleados e 
-                left join horarios h on e.cve_horario = h.cve_horario 
-            where 
-                jm.tipo in ('S','D')
-                and e.activo = 1 
-        ) 
-    union
-        (
-            select 
-                e.cve_empleado, di.fecha, h.hora_entrada as hora
-            from 
-                dias_inhabiles di
-                cross join empleados e 
-                left join horarios h on e.cve_horario = h.cve_horario 
-            where 
-                e.activo = 1 
-        union
-            select 
-                e.cve_empleado, di.fecha, h.hora_salida as hora
-            from 
-                dias_inhabiles di
-                cross join empleados e 
-                left join horarios h on e.cve_horario = h.cve_horario 
-            where 
-                e.activo = 1 
-        ) 
-    ;
-end;
-$$ language plpgsql strict immutable;
 
 /*
-Función asistencias
+Función asistencias(mes, anio)
 -----------------------
 Obtiene asistencias (entrada y salida) por empleado en un mes y año
  */
 create or replace function asistencias(mes varchar, anio varchar)
-returns table(fecha date, cve_empleado int, hora_entrada time, hora_salida time, hora_entrada_real time, hora_salida_real time) as 
+returns table(cve_empleado int, fecha date, hora_entrada time, hora_salida time) as 
 $$
-declare
-    fech_ini date;
-    fech_fin date;
 begin
-    fech_ini := anio || '-' || mes || '-01';
-    fech_fin := end_of_month(fech_ini);
     return query
-
     select 
-        distinct dh.fecha, e.cve_empleado, min(aj.hora) as hora_entrada, max(aj.hora) as hora_salida, 
-        (case 
-            when min(a.hora) = max(a.hora) then
-                case 
-                    when min(a.hora) < '12:00' then min(a.hora)
-                    when min(a.hora) > '12:00' then null
-                end
-            else min(a.hora)
-        end) as hora_entrada_real,
-        (case 
-            when min(a.hora) = max(a.hora) then
-                case 
-                    when max(a.hora) > '12:00' then max(a.hora)
-                    when max(a.hora) < '12:00' then null
-                end
-            else max(a.hora)
-        end) as hora_salida_real
+        distinct e.cve_empleado, dh.fecha, min(a.hora) as hora_entrada, max(a.hora) as hora_salida
     from 
         dias_habiles(mes, anio) dh 
         cross join empleados e 
-        left join asistencias_justificantes() aj on dh.fecha = aj.fecha and e.cve_empleado = aj.cve_empleado
         left join asistencias a on dh.fecha = a.fecha and e.cve_empleado = a.cve_empleado
     where
         e.activo = 1
     group by
-        dh.fecha, e.cve_empleado
+        e.cve_empleado, dh.fecha
+    order by
+        dh.fecha
     ;
 end;
 $$ language plpgsql strict immutable;
 
+
 /*
-Función incidentes
+Función incidentes(mes, anio, tolerancia_retardo, tolerancia_asistencia)
 -----------------------
 Obtiene incidentes por empleado en un mes y año
  */
 create or replace function incidentes(mes varchar, anio varchar, tolerancia_retardo varchar, tolerancia_asistencia varchar)
-returns table(fecha date, cve_empleado int, hora_entrada time, hora_salida time, hora_entrada_real time, hora_salida_real time, incidente text) as 
+returns table(cve_empleado int, fecha date, hora_entrada time, hora_salida time, cve_incidente int) as 
 $$
-declare
-    fech_ini date;
-    fech_fin date;
 begin
-    fech_ini := anio || '-' || mes || '-01';
-    fech_fin := end_of_month(fech_ini);
     return query
     select
-        a.fecha, a.cve_empleado, a.hora_entrada, a.hora_salida, a.hora_entrada_real, a.hora_salida_real,
+        a.cve_empleado, a.fecha, a.hora_entrada, a.hora_salida,
         (select
             case when a.hora_entrada is not null then
                 case when a.hora_entrada <> a.hora_salida then
                     case 
                         when date_trunc('minute', a.hora_entrada) > h.hora_entrada + tolerancia_retardo::interval then 
                             case when date_trunc('minute', a.hora_entrada) <= h.hora_entrada + tolerancia_asistencia::interval then 
-                                case when a.hora_salida < h.hora_salida then
-                                    'retardo, salida temprano'
+                                case when a.hora_salida < h.hora_salida then 
+                                    /* 'retardo, salida temprano' */
+                                    1
                                 else
-                                    'retardo'
+                                    /* 'retardo' */
+                                    2
                                 end
                             else
                                 case when a.hora_salida < h.hora_salida then
-                                    'entrada tardía, salida temprano'
+                                    /* 'entrada tardía, salida temprano' */
+                                    3
                                 else
-                                    'entrada tardía'
+                                    /* 'entrada tardía' */
+                                    4
                                 end
                             end
-                        when a.hora_salida < h.hora_salida then 'salida temprano'
+                        when a.hora_salida < h.hora_salida then 
+                            /* 'salida temprano' */ 
+                            5
                     end
                 else
                     case when a.hora_entrada > '12:00' then
                         case when a.hora_salida < h.hora_salida then 
-                            'sin entrada, salida temprano'
+                            /* 'sin entrada, salida temprano' */ 
+                            6
                         else 
-                            'sin entrada' 
+                            /* 'sin entrada' */
+                            7
                         end
                     else
                         case when date_trunc('minute', a.hora_entrada) > h.hora_entrada + tolerancia_retardo::interval then 
                             case when date_trunc('minute', a.hora_entrada) <= h.hora_entrada + tolerancia_asistencia::interval then 
-                                'retardo, sin salida'
+                                /* 'retardo, sin salida' */
+                                8
                             else
-                                'entrada tardía, sin salida'
+                                /* 'entrada tardía, sin salida' */
+                                9
                             end
                         else
-                            'sin salida'
+                            /* 'sin salida' */
+                            10
                         end
                     end
                 end
             else
-                case when a.fecha < now() then 'inasistencia' end
+                case when a.fecha < now() then 
+                    /* 'inasistencia' */
+                    11
+                end
             end
-        ) as incidente
+        ) as cve_incidente
     from 
         asistencias(mes, anio) a 
         left join empleados e on a.cve_empleado = e.cve_empleado
         left join horarios h on e.cve_horario = h.cve_horario
+    order by
+        fecha
     ;
 end;
 $$ language plpgsql strict immutable;
 
+
 /*
-Función incidentes_justificados
+Función justificacion(mes, anio, tolerancia_retardo, tolerancia_asistencia)
 -----------------------
-Obtiene incidentes con informacion de justificantes por empleado en un mes y año
+Obtiene justificacion de incidentes por empleado en un mes y año
  */
-create or replace function incidentes_justificados(mes varchar, anio varchar, tolerancia_retardo varchar, tolerancia_asistencia varchar)
-returns table(fecha date, cve_empleado int, hora_entrada time, hora_salida time, hora_entrada_real time, hora_salida_real time, incidente text, cve_justificante int, tipo_justificante text, cve_justificante_masivo int, tipo_justificante_masivo text) as
+create or replace function justificacion(mes varchar, anio varchar, tolerancia_retardo varchar, tolerancia_asistencia varchar)
+returns table(cve_empleado int, fecha date, hora_entrada time, hora_salida time, cve_incidente int, tipo_justificante text, cve_justificante int) as 
 $$
-declare
-    fech_ini date;
-    fech_fin date;
 begin
-    fech_ini := anio || '-' || mes || '-01';
-    fech_fin := end_of_month(fech_ini);
     return query
-    select 
-        i.fecha, i.cve_empleado, i.hora_entrada, i.hora_salida, i.hora_entrada_real, i.hora_salida_real, i.incidente, j.cve_justificante, j.tipo as tipo_justificante, jm.cve_justificante_masivo, jm.tipo as tipo_justificante_masivo 
-    from 
-        incidentes(mes, anio, tolerancia_retardo, tolerancia_asistencia) i 
-        left join justificantes j on i.fecha = j.fecha and i.cve_empleado = j.cve_empleado 
-        left join justificantes_masivos jm on i.fecha = jm.fecha 
-    order by 
-        fecha
-    ;
+	select
+		i.*
+		, (select * from
+			(
+				select 'di' from dias_inhabiles di where di.fecha = i.fecha
+				union
+				select 'jm' from justificantes_masivos jm where jm.fecha = i.fecha
+				union
+				select 'ji' from justificantes j where j.fecha = i.fecha and j.cve_empleado = i.cve_empleado
+				union
+				select 'hc' where i.cve_incidente is not null and i.hora_salida - i.hora_entrada >= '8:00'
+			) as tj
+		limit 1 ) as tipo_justificante
+		, (select * from
+			(
+				select di.cve_dia_inhabil from dias_inhabiles di where di.fecha = i.fecha
+				union
+				select jm.cve_justificante_masivo from justificantes_masivos jm where jm.fecha = i.fecha
+				union
+				select j.cve_justificante from justificantes j where j.fecha = i.fecha and j.cve_empleado = i.cve_empleado
+				union
+				select 99 where i.cve_incidente is not null and i.hora_salida - i.hora_entrada >= '8:00'
+			) as cj
+		limit 1 ) as cve_justificante
+	from
+		incidentes(mes, anio, tolerancia_retardo, tolerancia_asistencia) i
+	order by
+		i.fecha
+	;
 end;
 $$ language plpgsql strict immutable;
