@@ -76,48 +76,35 @@
                                             <p><span><?= get_nom_dia($incidentes_empleados_item['fecha']) ?></span>&nbsp;<?= date('d/m/Y', strtotime($incidentes_empleados_item['fecha'])) ?></p>
                                         </div>
                                         <div class="col-sm-2 align-self-center">
-                                            <p><?= $incidentes_empleados_item['hora_entrada_real'] ?></p>
+                                            <?php if ( ! in_array($incidentes_empleados_item['cve_incidente'], array('6', '7')) ) { ?>
+                                                <p><?= $incidentes_empleados_item['hora_entrada'] ?></p>
+                                            <?php } ?>
                                         </div>
                                         <div class="col-sm-2 align-self-center">
-                                            <p><?= $incidentes_empleados_item['hora_salida_real'] ?></p>
+                                            <?php if ( ! in_array($incidentes_empleados_item['cve_incidente'], array('8', '9', '10')) ) { ?>
+                                                <p><?= $incidentes_empleados_item['hora_salida'] ?></p>
+                                            <?php } ?>
                                         </div>
                                         <div class="col-sm-3 align-self-center">
-                                            <p><?= $incidentes_empleados_item['incidente'] ?></p>
+                                            <?php if ( ! $incidentes_empleados_item['cve_justificante'] ) { ?>
+                                                <p><?= $incidentes_empleados_item['desc_incidente'] ?></p>
+                                            <?php } ?>
                                         </div>
                                         <div class="col-sm-3 align-self-center">
                                             <?php 
-                                                $url = '';
                                                 $texto = '' ;
                                                 switch ($incidentes_empleados_item['tipo_justificante']) { 
-                                                    case "E": 
-                                                        $url = base_url() . "justificantes/detalle_justificante/" . $incidentes_empleados_item['cve_justificante'] ;
-                                                        $texto = "Entrada justificada" ;
+                                                    case "di": 
+                                                        $texto = $incidentes_empleados_item['desc_corta_justificante'] . ': '. $incidentes_empleados_item['desc_justificante'];
                                                         break;
-                                                    case "S": 
-                                                        $url = base_url() . "justificantes/detalle_justificante/" . $incidentes_empleados_item['cve_justificante'] ;
-                                                        $texto = "Salida justificada" ;
+                                                    case "jm": 
+                                                        $texto = $incidentes_empleados_item['desc_corta_justificante'] . ': '. $incidentes_empleados_item['desc_justificante'];
                                                         break;
-                                                    case "D": 
-                                                        $url = base_url() . "justificantes/detalle_justificante/" . $incidentes_empleados_item['cve_justificante'] ;
-                                                        $texto = "Dia justificado" ;
+                                                    case "ji": 
+                                                        $texto = $incidentes_empleados_item['desc_corta_justificante'];
                                                         break;
-                                                    case "V": 
-                                                        $url = base_url() . "justificantes/detalle_vacacion/" . $incidentes_empleados_item['cve_justificante'] ;
-                                                        $texto = "Vacaciones" ;
-                                                        break;
-                                                }
-                                                switch ($incidentes_empleados_item['tipo_justificante_masivo']) { 
-                                                    case "E": 
-                                                        $url = base_url() . "justificantes_masivos/detalle/" . $incidentes_empleados_item['cve_justificante_masivo'] ;
-                                                        $texto = "Entrada masiva justificada" ;
-                                                        break;
-                                                    case "S": 
-                                                        $url = base_url() . "justificantes_masivos/detalle/" . $incidentes_empleados_item['cve_justificante_masivo'] ;
-                                                        $texto = "Salida masiva justificada" ;
-                                                        break;
-                                                    case "D": 
-                                                        $url = base_url() . "justificantes_masivos/detalle/" . $incidentes_empleados_item['cve_justificante_masivo'] ;
-                                                        $texto = "Dia masivo justificado" ;
+                                                    case "hc": 
+                                                        $texto = $incidentes_empleados_item['desc_corta_justificante'] . ': '. $incidentes_empleados_item['desc_justificante'];
                                                         break;
                                                 }
                                             ?>
