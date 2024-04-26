@@ -1,5 +1,5 @@
 <?php
-class Justificantes extends CI_Controller {
+class Eventualidades extends CI_Controller {
 
     public function __construct()
     {
@@ -9,7 +9,6 @@ class Justificantes extends CI_Controller {
         $this->load->model('opciones_sistema_model');
         $this->load->model('bitacora_model');
         $this->load->model('parametros_sistema_model');
-        $this->load->model('justificantes_model');
         $this->load->model('eventualidades_model');
     }
 
@@ -39,87 +38,66 @@ class Justificantes extends CI_Controller {
         return $data;
     }
 
-    public function detalle_justificante($cve_justificante)
+    public function index()
     {
         if ($this->session->userdata('logueado')) {
             $data = [];
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            $data['justificante'] = $this->justificantes_model->get_justificante($cve_justificante);
             $data['eventualidades'] = $this->eventualidades_model->get_eventualidades();
 
             $this->load->view('templates/admheader', $data);
-            $this->load->view('justificantes/detalle_justificante', $data);
+            $this->load->view('templates/dlg_borrar');
+            $this->load->view('catalogos/eventualidades/lista', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');
         }
     }
-    
-    public function detalle_vacacion($cve_justificante)
+
+    public function detalle($cve_eventualidad)
     {
         if ($this->session->userdata('logueado')) {
             $data = [];
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            $data['justificante'] = $this->justificantes_model->get_justificante($cve_justificante);
+            $data['eventualidad'] = $this->eventualidades_model->get_eventualidad($cve_eventualidad);
 
             $this->load->view('templates/admheader', $data);
-            $this->load->view('justificantes/detalle_vacacion', $data);
+            $this->load->view('catalogos/eventualidades/detalle', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');
         }
     }
-    
-    public function nueva_vacacion($cve_empleado)
+
+    public function nuevo()
     {
         if ($this->session->userdata('logueado')) {
             $data = [];
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            $data['cve_empleado'] = $cve_empleado ;
-
             $this->load->view('templates/admheader', $data);
-            $this->load->view('justificantes/nueva_vacacion', $data);
+            $this->load->view('catalogos/eventualidades/nuevo', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');
         }
     }
 
-    public function nuevo_justificante($cve_empleado, $fecha=null)
-    {
-        if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $data += $this->get_system_params();
-
-            $data['cve_empleado'] = $cve_empleado ;
-            $data['fecha'] = $fecha ;
-            $data['eventualidades'] = $this->eventualidades_model->get_eventualidades();
-
-            $this->load->view('templates/admheader', $data);
-            $this->load->view('justificantes/nuevo_justificante', $data);
-            $this->load->view('templates/footer', $data);
-        } else {
-            redirect('admin/login');
-        }
-    }
-
-    public function guardar($cve_justificante=null)
+    public function guardar($cve_eventualidad=null)
     {
         if ($this->session->userdata('logueado')) {
 
-            $nuevo_justificante = is_null($cve_justificante);
+            $nuevo_eventualidad = is_null($cve_eventualidad);
 
-            $justificante = $this->input->post();
-            if ($justificante) {
+            $eventualidad = $this->input->post();
+            if ($eventualidad) {
 
-                if ($cve_justificante) {
+                if ($cve_eventualidad) {
                     $accion = 'modificó';
                 } else {
                     $accion = 'agregó';
@@ -127,22 +105,17 @@ class Justificantes extends CI_Controller {
 
                 // guardado
                 $data = array(
-                    'cve_empleado' => $justificante['cve_empleado'],
-                    'fecha' => $justificante['fecha'],
-                    'tipo' => $justificante['tipo'],
-                    'detalle' => $justificante['detalle'],
-                    'documento' => $justificante['documento'],
-                    'cve_eventualidad' => $justificante['cve_eventualidad'],
+                    'nom_eventualidad' => $eventualidad['nom_eventualidad'],
                 );
-                $cve_justificante = $this->justificantes_model->guardar($data, $cve_justificante);
+                $cve_eventualidad = $this->eventualidades_model->guardar($data, $cve_eventualidad);
                 
                 // registro en bitacora
 				$separador = ' -> ';
 				$usuario = $this->session->userdata('usuario');
 				$nom_usuario = $this->session->userdata('nom_usuario');
 				$nom_organizacion = $this->session->userdata('nom_organizacion');
-				$entidad = 'justificantes';
-                $valor = $cve_justificante . " " . $justificante['fecha'] . " " . $justificante['tipo'] ;
+				$entidad = 'eventualidades';
+                $valor = $cve_eventualidad . " " . $eventualidad['nom_eventualidad'];
 				$data = array(
 					'fecha' => date("Y-m-d"),
 					'hora' => date("H:i"),
@@ -158,27 +131,26 @@ class Justificantes extends CI_Controller {
 
             }
 
-            redirect('admin/empleados_detalle/' . $justificante['cve_empleado']);
+            redirect('eventualidades');
 
         } else {
             redirect('admin/login');
         }
     }
 
-    public function eliminar($cve_justificante)
+    public function eliminar($cve_eventualidad)
     {
         if ($this->session->userdata('logueado')) {
 
             // registro en bitacora
-            $justificante = $this->justificantes_model->get_justificante($cve_justificante);
+            $eventualidad = $this->eventualidades_model->get_eventualidad($cve_eventualidad);
             $separador = ' -> ';
             $usuario = $this->session->userdata('usuario');
             $nom_usuario = $this->session->userdata('nom_usuario');
             $nom_organizacion = $this->session->userdata('nom_organizacion');
             $accion = 'eliminó';
-            $entidad = 'justificantes';
-            $valor = $justificante['cve_empleado'] . " " . $justificante['fecha'] . " " . $justificante['tipo'] ;
-
+            $entidad = 'eventualidades';
+            $valor = $cve_eventualidad . " " . $eventualidad['nom_eventualidad'];
             $data = array(
                 'fecha' => date("Y-m-d"),
                 'hora' => date("H:i"),
@@ -193,9 +165,9 @@ class Justificantes extends CI_Controller {
             $this->bitacora_model->guardar($data);
 
             // eliminado
-            $this->justificantes_model->eliminar($cve_justificante);
+            $this->eventualidades_model->eliminar($cve_eventualidad);
 
-            redirect('admin/empleados_detalle/' . $justificante['cve_empleado']);
+            redirect('eventualidades');
 
         } else {
             redirect('admin/login');
@@ -203,4 +175,3 @@ class Justificantes extends CI_Controller {
     }
 
 }
-

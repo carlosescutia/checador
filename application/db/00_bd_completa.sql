@@ -97,7 +97,8 @@ CREATE TABLE justificantes (
     fecha date,
     tipo text,
     documento text,
-    detalle text
+    detalle text,
+    cve_eventualidad int
 );
 
 DROP TABLE IF EXISTS justificantes_masivos;
@@ -115,6 +116,20 @@ CREATE TABLE horarios (
     hora_entrada time,
     hora_salida time
 );
+
+DROP TABLE IF EXISTS tipo_incidentes;
+CREATE TABLE tipo_incidentes (
+    cve_incidente serial,
+    nom_incidente text,
+    desc_incidente text
+);
+
+DROP TABLE IF EXISTS eventualidades;
+CREATE TABLE eventualidades (
+    cve_eventualidad serial,
+    nom_eventualidad text
+);
+
 
 /*
 Función end_of_month(date)

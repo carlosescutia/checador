@@ -20,6 +20,9 @@
                 <div class="col-md-4">
                     <?php if (in_array('504', $accesos_sistema_rol)) include "organizaciones/boton.php"; ?>
                 </div>
+                <div class="col-md-4">
+                    <?php if (in_array('505', $accesos_sistema_rol)) include "eventualidades/boton.php"; ?>
+                </div>
             </div>
         </div>
         <?php if ($cve_rol == 'adm') { ?>
