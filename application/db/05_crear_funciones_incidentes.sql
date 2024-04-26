@@ -158,30 +158,34 @@ begin
 		i.*
 		, (select * from
 			(
-				select 'di' from dias_inhabiles di where di.fecha = i.fecha
+				select 'di' where di.cve_dia_inhabil is not null
 				union
-				select 'jm' from justificantes_masivos jm where jm.fecha = i.fecha
+				select 'jm' where jm.cve_justificante_masivo is not null
 				union
-				select 'ji' from justificantes j where j.fecha = i.fecha and j.cve_empleado = i.cve_empleado
+				select 'ji' where j.cve_justificante is not null
 				union
-				select 'hc' where i.cve_incidente is not null and i.hora_salida - i.hora_entrada >= '8:00'
+				select 'hc' where i.cve_incidente is not null  and di.cve_dia_inhabil is null and jm.cve_justificante_masivo is null and j.cve_justificante is null and i.hora_salida - i.hora_entrada >= '8:00'
 			) as tj
 		limit 1 ) as tipo_justificante
 		, (select * from
 			(
-				select di.cve_dia_inhabil from dias_inhabiles di where di.fecha = i.fecha
+				select di.cve_dia_inhabil where di.cve_dia_inhabil is not null
 				union
-				select jm.cve_justificante_masivo from justificantes_masivos jm where jm.fecha = i.fecha
+				select jm.cve_justificante_masivo where jm.cve_justificante_masivo is not null
 				union
-				select j.cve_justificante from justificantes j where j.fecha = i.fecha and j.cve_empleado = i.cve_empleado
+				select j.cve_justificante where j.cve_justificante is not null
 				union
-				select 99 where i.cve_incidente is not null and i.hora_salida - i.hora_entrada >= '8:00'
+				select 99 where i.cve_incidente is not null  and di.cve_dia_inhabil is null and jm.cve_justificante_masivo is null and j.cve_justificante is null and i.hora_salida - i.hora_entrada >= '8:00'
 			) as cj
 		limit 1 ) as cve_justificante
 	from
 		incidentes(mes, anio, tolerancia_retardo, tolerancia_asistencia) i
+        left join dias_inhabiles di on di.fecha = i.fecha
+        left join justificantes_masivos jm on jm.fecha = i.fecha
+        left join justificantes j on j.fecha = i.fecha and j.cve_empleado = i.cve_empleado
 	order by
 		i.fecha
 	;
+
 end;
 $$ language plpgsql strict immutable;

@@ -77,12 +77,28 @@
                                         </div>
                                         <div class="col-sm-2 align-self-center">
                                             <?php if ( ! in_array($incidentes_empleados_item['cve_incidente'], array('6', '7')) ) { ?>
-                                                <p><?= $incidentes_empleados_item['hora_entrada'] ?></p>
+                                                <p>
+                                                    <?php if ( in_array($incidentes_empleados_item['cve_incidente'], array('1','2','3','4','9')) ) { ?>
+                                                        <u>
+                                                    <?php } ?>
+                                                        <?= $incidentes_empleados_item['hora_entrada'] ?>
+                                                    <?php if ( in_array($incidentes_empleados_item['cve_incidente'], array('1','2','3','4','9')) ) { ?>
+                                                        </u>
+                                                    <?php } ?>
+                                                </p>
                                             <?php } ?>
                                         </div>
                                         <div class="col-sm-2 align-self-center">
                                             <?php if ( ! in_array($incidentes_empleados_item['cve_incidente'], array('8', '9', '10')) ) { ?>
-                                                <p><?= $incidentes_empleados_item['hora_salida'] ?></p>
+                                                <p>
+                                                    <?php if ( in_array($incidentes_empleados_item['cve_incidente'], array('1','3','5','6')) ) { ?>
+                                                        <u>
+                                                    <?php } ?>
+                                                        <?= $incidentes_empleados_item['hora_salida'] ?>
+                                                    <?php if ( in_array($incidentes_empleados_item['cve_incidente'], array('1','3','5','6')) ) { ?>
+                                                        </u>
+                                                    <?php } ?>
+                                                </p>
                                             <?php } ?>
                                         </div>
                                         <div class="col-sm-3 align-self-center">

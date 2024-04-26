@@ -33,6 +33,17 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label for="cve_eventualidad" class="col-sm-2 col-form-label">Eventualidad</label>
+                <div class="col-sm-4">
+                    <select class="form-select" name="cve_eventualidad" id="cve_eventualidad">
+                        <option value="0" ></option>
+                        <?php foreach ($eventualidades as $eventualidades_item) { ?>
+                        <option value="<?= $eventualidades_item['cve_eventualidad'] ?>" ><?= $eventualidades_item['nom_eventualidad'] ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
                 <label for="detalle" class="col-sm-2 col-form-label">Detalle</label>
                 <div class="col-sm-4">
                     <textarea class="form-control" name="detalle" id="detalle" rows="4"></textarea>
