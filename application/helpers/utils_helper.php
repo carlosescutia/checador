@@ -37,30 +37,62 @@ if ( ! function_exists('get_nombre_dia') )
     {
         switch ( date('w', strtotime($fecha)) ) {
         case 0:
-            $nombre_dia = "Dom";
+            $nombre_dia = "Domingo";
             break;
         case 1:
-            $nombre_dia = "Lun";
+            $nombre_dia = "Lunes";
             break;
         case 2:
-            $nombre_dia = "Mar";
+            $nombre_dia = "Martes";
             break;
         case 3:
-            $nombre_dia = "Mie";
+            $nombre_dia = "Miercoles";
             break;
         case 4:
-            $nombre_dia = "Jue";
+            $nombre_dia = "Jueves";
             break;
         case 5:
-            $nombre_dia = "Vie";
+            $nombre_dia = "Viernes";
             break;
         case 6:
-            $nombre_dia = "Sab";
+            $nombre_dia = "Sabado";
             break;
         }
         return $nombre_dia;
     }
 }
+
+if ( ! function_exists('get_nom_dia_num') )
+{
+    function get_nom_dia_num($dia)
+    {
+        switch ($dia) {
+        case 0:
+            $nom_dia = "Dom";
+            break;
+        case 1:
+            $nom_dia = "Lun";
+            break;
+        case 2:
+            $nom_dia = "Mar";
+            break;
+        case 3:
+            $nom_dia = "Mie";
+            break;
+        case 4:
+            $nom_dia = "Jue";
+            break;
+        case 5:
+            $nom_dia = "Vie";
+            break;
+        case 6:
+            $nom_dia = "Sab";
+            break;
+        }
+        return $nom_dia;
+    }
+}
+
 
 if ( ! function_exists('get_nom_mes') )
 {

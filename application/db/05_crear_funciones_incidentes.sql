@@ -38,6 +38,38 @@ $$ language plpgsql strict immutable;
 
 
 /*
+Función horarios(mes, anio)
+-----------------------
+Obtiene horarios (entrada y salida) por empleado en un mes y año
+toma en cuenta horarios especiales
+ */
+create or replace function horarios(mes varchar, anio varchar)
+returns table(cve_empleado int, fecha date, hora_entrada time, hora_salida time) as 
+$$
+begin
+    return query
+    select 
+        distinct e.cve_empleado, dh.fecha,
+        coalesce(hsp.hora_entrada, hb.hora_entrada) as hora_entrada,
+        coalesce(hsp.hora_salida, hb.hora_salida) as hora_salida
+    from 
+        dias_habiles('3', '2024') dh  
+        cross join empleados e 
+        left join horarios_especiales he on he.cve_empleado = e.cve_empleado and dh.fecha::timestamp between he.fech_ini and he.fech_fin
+        left join horarios_especiales_dias hed on hed.id_horario_especial = he.id_horario_especial and hed.cve_dia = extract(dow from dh.fecha::timestamp)
+        left join horarios hsp on hsp.cve_horario = hed.cve_horario
+        left join horarios hb on hb.cve_horario = e.cve_horario
+    where
+        e.activo = 1
+        and e.cve_empleado = 30
+    order by
+        dh.fecha
+    ;
+end;
+$$ language plpgsql strict immutable;
+
+
+/*
 Función asistencias(mes, anio)
 -----------------------
 Obtiene asistencias (entrada y salida) por empleado en un mes y año
@@ -136,7 +168,7 @@ begin
     from 
         asistencias(mes, anio) a 
         left join empleados e on a.cve_empleado = e.cve_empleado
-        left join horarios h on e.cve_horario = h.cve_horario
+        left join horarios(mes, anio) h on a.cve_empleado = h.cve_empleado and a.fecha = h.fecha
     order by
         fecha
     ;

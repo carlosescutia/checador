@@ -130,6 +130,21 @@ CREATE TABLE eventualidades (
     nom_eventualidad text
 );
 
+DROP TABLE IF EXISTS horarios_especiales;
+CREATE TABLE horarios_especiales (
+    id_horario_especial serial,
+    cve_empleado int,
+    nom_horario_especial text,
+    fech_ini date,
+    fech_fin date
+);
+
+DROP TABLE IF EXISTS horarios_especiales_dias;
+CREATE TABLE horarios_especiales_dias (
+    id_horario_especial int,
+    cve_dia int,
+    cve_horario int
+);
 
 /*
 Función end_of_month(date)
@@ -167,6 +182,38 @@ begin
 		extract(dow from dt) between 1 and 5 
 	;
 end; 
+$$ language plpgsql strict immutable;
+
+
+/*
+Función horarios(mes, anio)
+-----------------------
+Obtiene horarios (entrada y salida) por empleado en un mes y año
+toma en cuenta horarios especiales
+ */
+create or replace function horarios(mes varchar, anio varchar)
+returns table(cve_empleado int, fecha date, hora_entrada time, hora_salida time) as 
+$$
+begin
+    return query
+    select 
+        distinct e.cve_empleado, dh.fecha,
+        coalesce(hsp.hora_entrada, hb.hora_entrada) as hora_entrada,
+        coalesce(hsp.hora_salida, hb.hora_salida) as hora_salida
+    from 
+        dias_habiles('3', '2024') dh  
+        cross join empleados e 
+        left join horarios_especiales he on he.cve_empleado = e.cve_empleado and dh.fecha::timestamp between he.fech_ini and he.fech_fin
+        left join horarios_especiales_dias hed on hed.id_horario_especial = he.id_horario_especial and hed.cve_dia = extract(dow from dh.fecha::timestamp)
+        left join horarios hsp on hsp.cve_horario = hed.cve_horario
+        left join horarios hb on hb.cve_horario = e.cve_horario
+    where
+        e.activo = 1
+        and e.cve_empleado = 30
+    order by
+        dh.fecha
+    ;
+end;
 $$ language plpgsql strict immutable;
 
 
@@ -269,7 +316,7 @@ begin
     from 
         asistencias(mes, anio) a 
         left join empleados e on a.cve_empleado = e.cve_empleado
-        left join horarios h on e.cve_horario = h.cve_horario
+        left join horarios(mes, anio) h on a.cve_empleado = h.cve_empleado and a.fecha = h.fecha
     order by
         fecha
     ;
@@ -291,30 +338,34 @@ begin
 		i.*
 		, (select * from
 			(
-				select 'di' from dias_inhabiles di where di.fecha = i.fecha
+				select 'di' where di.cve_dia_inhabil is not null
 				union
-				select 'jm' from justificantes_masivos jm where jm.fecha = i.fecha
+				select 'jm' where jm.cve_justificante_masivo is not null
 				union
-				select 'ji' from justificantes j where j.fecha = i.fecha and j.cve_empleado = i.cve_empleado
+				select 'ji' where j.cve_justificante is not null
 				union
-				select 'hc' where i.cve_incidente is not null and i.hora_salida - i.hora_entrada >= '8:00'
+				select 'hc' where i.cve_incidente is not null  and di.cve_dia_inhabil is null and jm.cve_justificante_masivo is null and j.cve_justificante is null and i.hora_salida - i.hora_entrada >= '8:00'
 			) as tj
 		limit 1 ) as tipo_justificante
 		, (select * from
 			(
-				select di.cve_dia_inhabil from dias_inhabiles di where di.fecha = i.fecha
+				select di.cve_dia_inhabil where di.cve_dia_inhabil is not null
 				union
-				select jm.cve_justificante_masivo from justificantes_masivos jm where jm.fecha = i.fecha
+				select jm.cve_justificante_masivo where jm.cve_justificante_masivo is not null
 				union
-				select j.cve_justificante from justificantes j where j.fecha = i.fecha and j.cve_empleado = i.cve_empleado
+				select j.cve_justificante where j.cve_justificante is not null
 				union
-				select 99 where i.cve_incidente is not null and i.hora_salida - i.hora_entrada >= '8:00'
+				select 99 where i.cve_incidente is not null  and di.cve_dia_inhabil is null and jm.cve_justificante_masivo is null and j.cve_justificante is null and i.hora_salida - i.hora_entrada >= '8:00'
 			) as cj
 		limit 1 ) as cve_justificante
 	from
 		incidentes(mes, anio, tolerancia_retardo, tolerancia_asistencia) i
+        left join dias_inhabiles di on di.fecha = i.fecha
+        left join justificantes_masivos jm on jm.fecha = i.fecha
+        left join justificantes j on j.fecha = i.fecha and j.cve_empleado = i.cve_empleado
 	order by
 		i.fecha
 	;
+
 end;
 $$ language plpgsql strict immutable;

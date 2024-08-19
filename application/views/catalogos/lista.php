@@ -5,24 +5,37 @@
     <div class="row">
         <div class="col-md-9 p-3">
             <h2>Aplicación</h2>
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <?php if (in_array('501', $accesos_sistema_rol)) include "empleados/boton.php"; ?>
-                </div>
-                <div class="col-md-4">
-                    <?php if (in_array('502', $accesos_sistema_rol)) include "horarios/boton.php"; ?>
-                </div>
-                <div class="col-md-4">
-                    <?php if (in_array('503', $accesos_sistema_rol)) include "parametros_sistema/boton.php"; ?>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <?php if (in_array('504', $accesos_sistema_rol)) include "organizaciones/boton.php"; ?>
-                </div>
-                <div class="col-md-4">
-                    <?php if (in_array('505', $accesos_sistema_rol)) include "eventualidades/boton.php"; ?>
-                </div>
+            <div class="row mb-3 gy-3">
+                <?php if (in_array('501', $accesos_sistema_rol)) { ?>
+                    <div class="col-md-4">
+                        <?php include "empleados/boton.php"; ?>
+                    </div>
+                <?php } ?>
+                <?php if (in_array('502', $accesos_sistema_rol)) { ?>
+                    <div class="col-md-4">
+                        <?php include "horarios/boton.php"; ?>
+                    </div>
+                <?php } ?>
+                <?php if (in_array('506', $accesos_sistema_rol)) { ?>
+                    <div class="col-md-4">
+                        <?php include "horarios_especiales/boton.php"; ?>
+                    </div>
+                <?php } ?>
+                <?php if (in_array('503', $accesos_sistema_rol)) { ?>
+                    <div class="col-md-4">
+                        <?php include "parametros_sistema/boton.php"; ?>
+                    </div>
+                <?php } ?>
+                <?php if (in_array('504', $accesos_sistema_rol)) { ?>
+                    <div class="col-md-4">
+                        <?php include "organizaciones/boton.php"; ?>
+                    </div>
+                <?php } ?>
+                <?php if (in_array('505', $accesos_sistema_rol)) { ?>
+                    <div class="col-md-4">
+                        <?php include "eventualidades/boton.php"; ?>
+                    </div>
+                <?php } ?>
             </div>
         </div>
         <?php if ($cve_rol == 'adm') { ?>
