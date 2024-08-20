@@ -87,7 +87,7 @@ class Horarios_especiales_dias extends CI_Controller {
         }
     }
 
-    public function eliminar($id_horario_especial, $cve_dia)
+    public function eliminar_dia($id_horario_especial, $cve_dia)
     {
         if ($this->session->userdata('logueado')) {
 
@@ -113,7 +113,7 @@ class Horarios_especiales_dias extends CI_Controller {
             $this->bitacora_model->guardar($data);
 
             // eliminado
-            $this->horarios_especiales_dias_model->eliminar($id_horario_especial, $cve_dia);
+            $this->horarios_especiales_dias_model->eliminar_dia($id_horario_especial, $cve_dia);
 
             redirect('horarios_especiales/detalle/'.$id_horario_especial);
 

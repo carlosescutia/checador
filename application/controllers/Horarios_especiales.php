@@ -175,6 +175,9 @@ class Horarios_especiales extends CI_Controller {
             );
             $this->bitacora_model->guardar($data);
 
+            // eliminar horarios_especiales_dias relacionados
+            $this->horarios_especiales_dias_model->eliminar($id_horario_especial);
+
             // eliminado
             $this->horarios_especiales_model->eliminar($id_horario_especial);
 

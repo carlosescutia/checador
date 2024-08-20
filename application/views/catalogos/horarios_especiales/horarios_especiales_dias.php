@@ -16,7 +16,7 @@
                 <div class="col-sm-2">
                     <?php 
                     $item_eliminar = get_nom_dia_num($horario_especial_dias_item['cve_dia']) . ' - ' . $horario_especial_dias_item['desc_horario'];
-                    $url = base_url() . "horarios_especiales_dias/eliminar/". $horario_especial['id_horario_especial'].'/'.$horario_especial_dias_item['cve_dia']; 
+                    $url = base_url() . "horarios_especiales_dias/eliminar_dia/". $horario_especial['id_horario_especial'].'/'.$horario_especial_dias_item['cve_dia']; 
                     ?>
                     <a href="#dlg_borrar" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i>
                     </a>

@@ -16,7 +16,13 @@ class Horarios_especiales_dias_model extends CI_Model {
         $this->db->insert('horarios_especiales_dias', $data);
     }
 
-    public function eliminar($id_horario_especial, $cve_dia)
+    public function eliminar($id_horario_especial)
+    {
+        $this->db->where('id_horario_especial', $id_horario_especial);
+        $result = $this->db->delete('horarios_especiales_dias');
+    }
+
+    public function eliminar_dia($id_horario_especial, $cve_dia)
     {
         $this->db->where('id_horario_especial', $id_horario_especial);
         $this->db->where('cve_dia', $cve_dia);
