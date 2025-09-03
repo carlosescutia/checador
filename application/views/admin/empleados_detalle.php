@@ -106,7 +106,7 @@
 
     <div class="form-group row">
         <div class="col-sm-10">
-            <a href="<?=$url_padre ?>" class="btn btn-secondary d-print-none">Volver :)</a>
+            <a href="<?=$url_padre ?>" class="btn btn-secondary d-print-none">Volver</a>
         </div>
     </div>
 

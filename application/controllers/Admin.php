@@ -75,7 +75,7 @@ class Admin extends CI_Controller {
                 } else {
                     $anio = date('Y');
                 }
-			}
+            }
             $data['mes'] = $mes;
             $data['anio'] = $anio;
 
@@ -125,7 +125,7 @@ class Admin extends CI_Controller {
                 } else {
                     $anio = date('Y');
                 }
-			}
+            }
             $data['mes'] = $mes;
             $data['anio'] = $anio;
 
@@ -174,7 +174,7 @@ class Admin extends CI_Controller {
                 } else {
                     $anio = date('Y');
                 }
-			}
+            }
             $data['mes'] = $mes;
             $data['anio'] = $anio;
 
@@ -225,7 +225,7 @@ class Admin extends CI_Controller {
                 } else {
                     $anio = date('Y');
                 }
-			}
+            }
             $data['mes'] = $mes;
             $data['anio'] = $anio;
 
@@ -273,7 +273,7 @@ class Admin extends CI_Controller {
                 } else {
                     $anio = date('Y');
                 }
-			}
+            }
             $data['mes'] = $mes;
             $data['anio'] = $anio;
 
@@ -321,7 +321,7 @@ class Admin extends CI_Controller {
                 } else {
                     $anio = date('Y');
                 }
-			}
+            }
             $data['mes'] = $mes;
             $data['anio'] = $anio;
 

@@ -38,6 +38,7 @@
                                 <option value="D" <?= ($justificante_masivo['tipo'] == 'D') ? 'selected' : '' ?> >Día</option>
                                 <option value="E" <?= ($justificante_masivo['tipo'] == 'E') ? 'selected' : '' ?> >Entrada</option>
                                 <option value="S" <?= ($justificante_masivo['tipo'] == 'S') ? 'selected' : '' ?> >Salida</option>
+                                <option value="V" <?= ($justificante_masivo['tipo'] == 'V') ? 'selected' : '' ?> >Vacaciones</option>
                             </select>
                         </div>
                     </div>
