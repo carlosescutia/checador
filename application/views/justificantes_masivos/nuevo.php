@@ -38,6 +38,7 @@
                                 <option value="D" >Día</option>
                                 <option value="E" >Entrada</option>
                                 <option value="S" >Salida</option>
+                                <option value="V" >Vacaciones</option>
                             </select>
                         </div>
                     </div>
