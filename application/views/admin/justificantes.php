@@ -15,6 +15,12 @@
             </thead>
             <tbody>
             <?php foreach ($justificantes_empleado as $justificantes_empleado_item) { ?>
+                <?php 
+                    $lbl_dias = '';
+                    if ($justificantes_empleado_item['tipo'] == 'D') {
+                        $lbl_dias = '(' . $justificantes_empleado_item['dias'] . 'd)';
+                    }
+                ?>
                 <tr>
                     <td>
                         <a href="<?=base_url()?>justificantes/detalle_justificante/<?=$justificantes_empleado_item['cve_justificante']?>"><?= date('d/m/y', strtotime($justificantes_empleado_item['fecha'])) ?></a>
@@ -26,7 +32,7 @@
                         <?= $justificantes_empleado_item['tipo'] ?>
                     </td>
                     <td>
-                        <?= $justificantes_empleado_item['nom_eventualidad'] ?>
+                        <?= $justificantes_empleado_item['nom_eventualidad'] ?> <?= $lbl_dias ?>
                     </td>
                     <td>
                         <?php 

@@ -36,6 +36,27 @@ begin
 end; 
 $$ language plpgsql strict immutable;
 
+/*
+Función dias_habiles_rango(fech_ini, fech_fin)
+-----------------------
+Devuelve el número de días hábiles entre dos fechas
+ */
+create or replace function dias_habiles_rango(fech_ini date, fech_fin date)
+returns integer as 
+$$
+begin
+    return (
+        select
+            count(*)
+        from
+            generate_series(fech_ini, fech_fin, interval '1' day) as t(dt)
+        where
+            extract(dow from dt) between 1 and 5 
+            and dt not in (select fecha from dias_inhabiles)
+    ) ;
+end; 
+$$ language plpgsql strict immutable;
+
 
 /*
 Función horarios(mes, anio)

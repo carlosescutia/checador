@@ -9,16 +9,16 @@ class Justificantes_model extends CI_Model {
     {
         $sql = ""
             ."select  "
-            ."j.cve_justificante, j.cve_empleado, j.fecha, j.tipo, j.documento, j.detalle, j.cve_eventualidad, j.fech_fin "
+            ."j.cve_justificante, j.cve_empleado, j.fecha, j.tipo, j.detalle, j.fech_fin, dias_habiles_rango(j.fecha, coalesce(j.fech_fin, j.fecha)) as dias "
             ."from  "
             ."justificantes j "
             ."where  "
             ."extract(year from j.fecha) = ? "
-            ."and j.cve_empleado = ? "
+            ."and j.cve_empleado = ?  "
             ."and j.tipo = 'V'  "
             ."union "
             ."select  "
-            ."jm.cve_justificante_masivo, null as cve_empleado, jm.fecha, jm.tipo, null as documento, jm.desc_justificante_masivo as detalle, null as cve_eventualidad, jm.fech_fin "
+            ."jm.cve_justificante_masivo, ? as cve_empleado, jm.fecha, jm.tipo, jm.desc_justificante_masivo as detalle, jm.fech_fin, dias_habiles_rango(jm.fecha, coalesce(jm.fech_fin, jm.fecha)) as dias "
             ."from  "
             ."justificantes_masivos jm "
             ."where  "
@@ -26,7 +26,7 @@ class Justificantes_model extends CI_Model {
             ."and jm.tipo = 'V'  "
             ."union "
             ."select  "
-            ."jm2.cve_justificante_masivo, null as cve_empleado, jm2.fecha, jm2.tipo, null as documento, jm2.desc_justificante_masivo as detalle, null as cve_eventualidad, jm2.fech_fin "
+            ."jm2.cve_justificante_masivo, ? as cve_empleado, jm2.fecha, jm2.tipo, jm2.desc_justificante_masivo as detalle, jm2.fech_fin, dias_habiles_rango(jm2.fecha, coalesce(jm2.fech_fin, jm2.fecha)) as dias "
             ."from  "
             ."justificantes_masivos jm2 "
             ."where  "
@@ -35,7 +35,7 @@ class Justificantes_model extends CI_Model {
             ."order by  "
             ."fecha  "
             ."";
-        $query = $this->db->query($sql, array($anio, $cve_empleado, $anio, $anio, $cve_empleado));
+        $query = $this->db->query($sql, array($anio, $cve_empleado, $cve_empleado, $anio, $cve_empleado, $anio, $cve_empleado));
         return $query->result_array();
     }
 
@@ -44,6 +44,7 @@ class Justificantes_model extends CI_Model {
         $sql = ""
             ."select  "
             ."j.*, "
+            ."dias_habiles_rango(j.fecha, coalesce(j.fech_fin, j.fecha)) as dias, "
             ."e.nom_eventualidad "
             ."from  "
             ."justificantes j "

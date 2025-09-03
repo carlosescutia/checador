@@ -22,7 +22,7 @@
                         <?= is_null($vacaciones_empleado_item['fech_fin']) ? "": date('d/m/y', strtotime($vacaciones_empleado_item['fech_fin'])) ?>
                     </td>
                     <td>
-                        <?= $vacaciones_empleado_item['detalle'] ?>
+                        <?= $vacaciones_empleado_item['detalle'] ?> (<?= $vacaciones_empleado_item['dias'] ?>d)
                     </td>
                     <td>
                         <?php 
