@@ -43,97 +43,81 @@
     <div style="min-height: 46vh">
         <div class="row">
             <div class="col-md-12">
-                <?php foreach ($empleados as $empleados_item) { ?>
-                <h4 class="bg-secondary text-white py-2"><?= $empleados_item['nom_empleado'] ?> - Asistencia de <?=get_nombre_mes($mes)?> <?= $anio ?></h4>
+                <?php foreach ($empleados as $empleados_item): ?>
+                    <h4 class="bg-secondary text-white py-2"><?= $empleados_item['nom_empleado'] ?> - Asistencia de <?=get_nombre_mes($mes)?> <?= $anio ?></h4>
                     <div class="card mt-0 mb-3 border-0">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="row">
-                                        <div class="col-sm-2 align-self-center">
-                                            <p class="fw-bold">Fecha</p>
-                                        </div>
-                                        <div class="col-sm-2 align-self-center">
-                                            <p class="fw-bold">Entrada</p>
-                                        </div>
-                                        <div class="col-sm-2 align-self-center">
-                                            <p class="fw-bold">Salida</p>
-                                        </div>
-                                        <div class="col-sm-3 align-self-center">
-                                            <p class="fw-bold">Incidente</p>
-                                        </div>
-                                        <div class="col-sm-3 align-self-center">
-                                            <p class="fw-bold">Justificante</p>
-                                        </div>
-                                    </div>
-                                    <?php foreach ($incidentes_empleados as $incidentes_empleados_item) { 
-                                        if ($incidentes_empleados_item['cve_empleado'] !== $empleados_item['cve_empleado']) {
-                                            continue;
-                                        }
-                                    ?>
-                                    <div class="row alternate-color">
-                                        <div class="col-sm-2 align-self-center">
-                                            <p><span><?= get_nom_dia($incidentes_empleados_item['fecha']) ?></span>&nbsp;<?= date('d/m/Y', strtotime($incidentes_empleados_item['fecha'])) ?></p>
-                                        </div>
-                                        <div class="col-sm-2 align-self-center">
-                                            <?php if ( ! in_array($incidentes_empleados_item['cve_incidente'], array('6', '7')) ) { ?>
-                                                <p>
-                                                    <?php if ( in_array($incidentes_empleados_item['cve_incidente'], array('1','2','3','4','9')) ) { ?>
-                                                        <u>
-                                                    <?php } ?>
-                                                        <?= $incidentes_empleados_item['hora_entrada'] ?>
-                                                    <?php if ( in_array($incidentes_empleados_item['cve_incidente'], array('1','2','3','4','9')) ) { ?>
-                                                        </u>
-                                                    <?php } ?>
-                                                </p>
-                                            <?php } ?>
-                                        </div>
-                                        <div class="col-sm-2 align-self-center">
-                                            <?php if ( ! in_array($incidentes_empleados_item['cve_incidente'], array('8', '9', '10')) ) { ?>
-                                                <p>
-                                                    <?php if ( in_array($incidentes_empleados_item['cve_incidente'], array('1','3','5','6')) ) { ?>
-                                                        <u>
-                                                    <?php } ?>
-                                                        <?= $incidentes_empleados_item['hora_salida'] ?>
-                                                    <?php if ( in_array($incidentes_empleados_item['cve_incidente'], array('1','3','5','6')) ) { ?>
-                                                        </u>
-                                                    <?php } ?>
-                                                </p>
-                                            <?php } ?>
-                                        </div>
-                                        <div class="col-sm-3 align-self-center">
-                                            <?php if ( ! $incidentes_empleados_item['cve_justificante'] ) { ?>
-                                                <p><?= $incidentes_empleados_item['desc_incidente'] ?></p>
-                                            <?php } ?>
-                                        </div>
-                                        <div class="col-sm-3 align-self-center">
-                                            <?php 
-                                                $texto = '' ;
-                                                switch ($incidentes_empleados_item['tipo_justificante']) { 
-                                                    case "di": 
-                                                        $texto = $incidentes_empleados_item['desc_corta_justificante'] . ': '. $incidentes_empleados_item['desc_justificante'];
-                                                        break;
-                                                    case "jm": 
-                                                        $texto = $incidentes_empleados_item['desc_corta_justificante'] . ': '. $incidentes_empleados_item['desc_justificante'];
-                                                        break;
-                                                    case "ji": 
-                                                        $texto = $incidentes_empleados_item['desc_corta_justificante'];
-                                                        break;
-                                                    case "hc": 
-                                                        $texto = $incidentes_empleados_item['desc_corta_justificante'] . ': '. $incidentes_empleados_item['desc_justificante'];
-                                                        break;
-                                                }
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Fecha</th>
+                                                <th scope="col">Entrada</th>
+                                                <th scope="col">Salida</th>
+                                                <th scope="col">Incidente</th>
+                                                <th scope="col">Justificante</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($incidentes_empleados as $incidentes_empleados_item):
+                                                if ($incidentes_empleados_item['cve_empleado'] !== $empleados_item['cve_empleado']):
+                                                    continue;
+                                                endif
                                             ?>
-                                            <p><?=$texto?></p>
-                                        </div>
-                                    </div>
-                                    <?php } ?>
+                                            <tr>
+                                                <td>
+                                                    <?= get_nom_dia($incidentes_empleados_item['fecha']) ?>&nbsp;<?= date('d/m/Y', strtotime($incidentes_empleados_item['fecha'])) ?>
+                                                </td>
+                                                <td>
+                                                    <?php if ( ! in_array($incidentes_empleados_item['cve_incidente'], array('6', '7')) ): ?>
+                                                        <?php if ( in_array($incidentes_empleados_item['cve_incidente'], array('1','2','3','4','9')) ): ?> <u> <?php endif ?>
+                                                        <?= is_null($incidentes_empleados_item['hora_entrada']) ? '' : date('H:i', strtotime($incidentes_empleados_item['hora_entrada'])) ?>
+                                                        <?php if ( in_array($incidentes_empleados_item['cve_incidente'], array('1','2','3','4','9')) ): ?> </u> <?php endif ?>
+                                                    <?php endif ?>
+                                                </td>
+                                                <td>
+                                                    <?php if ( ! in_array($incidentes_empleados_item['cve_incidente'], array('8', '9', '10')) ): ?>
+                                                        <?php if ( in_array($incidentes_empleados_item['cve_incidente'], array('1','3','5','6')) ): ?> <u> <?php endif ?>
+                                                        <?= is_null($incidentes_empleados_item['hora_salida']) ? '' : date('H:i', strtotime($incidentes_empleados_item['hora_salida'])) ?>
+                                                        <?php if ( in_array($incidentes_empleados_item['cve_incidente'], array('1','3','5','6')) ): ?> </u> <?php endif ?>
+                                                    <?php endif ?>
+                                                </td>
+                                                <td>
+                                                    <?php if ( ! $incidentes_empleados_item['cve_justificante'] ): ?>
+                                                        <?= $incidentes_empleados_item['desc_incidente'] ?>
+                                                    <?php endif ?>
+                                                </td>
+                                                <td>
+                                                    <?php 
+                                                        $texto = '' ;
+                                                        switch ($incidentes_empleados_item['tipo_justificante']): 
+                                                            case "di": 
+                                                                $texto = $incidentes_empleados_item['desc_corta_justificante'] . ': '. $incidentes_empleados_item['desc_justificante'];
+                                                                break;
+                                                            case "jm": 
+                                                                $texto = $incidentes_empleados_item['desc_corta_justificante'] . ': '. $incidentes_empleados_item['desc_justificante'];
+                                                                break;
+                                                            case "ji": 
+                                                                $texto = $incidentes_empleados_item['desc_corta_justificante'];
+                                                                break;
+                                                            case "hc": 
+                                                                $texto = $incidentes_empleados_item['desc_corta_justificante'] . ': '. $incidentes_empleados_item['desc_justificante'];
+                                                                break;
+                                                        endswitch
+                                                    ?>
+                                                    <?=$texto?>
+                                                </td>
+                                            </tr>
+                                            <?php endforeach ?>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <hr class="page-break" />
-                <?php } ?>
+                <?php endforeach ?>
             </div>
         </div>
     </div>

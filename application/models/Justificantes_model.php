@@ -14,7 +14,21 @@ class Justificantes_model extends CI_Model {
 
     public function get_justificantes_empleado($mes, $anio, $cve_empleado)
     {
-        $sql = "select * from justificantes where extract(month from fecha) = ? and extract(year from fecha) = ? and cve_empleado = ? and tipo in ('E','S','D') order by fecha ";
+        $sql = ""
+            ."select  "
+            ."j.*, "
+            ."e.nom_eventualidad "
+            ."from  "
+            ."justificantes j "
+            ."left join eventualidades e on e.cve_eventualidad = j.cve_eventualidad "
+            ."where  "
+            ."extract(month from j.fecha) = ?  "
+            ."and extract(year from j.fecha) = ?  "
+            ."and j.cve_empleado = ?  "
+            ."and j.tipo in ('E','S','D')  "
+            ."order  "
+            ."by j.fecha  "
+            ."";
         $query = $this->db->query($sql, array($mes, $anio, $cve_empleado));
         return $query->result_array();
     }

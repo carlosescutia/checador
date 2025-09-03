@@ -16,12 +16,17 @@
         <script src="<?=base_url()?>js/bootstrap.bundle.min.js"></script>
 
         <!-- chartjs-gauge -->
-		<script src="https://unpkg.com/chart.js@2.9.4/dist/Chart.bundle.js"></script>
-		<script src="https://unpkg.com/chartjs-gauge@0.3.0/dist/chartjs-gauge.js"></script>
-		<script src="https://unpkg.com/chartjs-plugin-datalabels@0.7.0/dist/chartjs-plugin-datalabels.js"></script>
+    <!--
+        <script src="https://unpkg.com/chart.js@2.9.4/dist/Chart.bundle.js"></script>
+        <script src="https://unpkg.com/chartjs-gauge@0.3.0/dist/chartjs-gauge.js"></script>
+        <script src="https://unpkg.com/chartjs-plugin-datalabels@0.7.0/dist/chartjs-plugin-datalabels.js"></script>
+-->
+        <script src="<?=base_url()?>js/Chart.bundle.js"></script>
+        <script src="<?=base_url()?>js/chartjs-gauge.js"></script>
+        <script src="<?=base_url()?>js/chartjs-plugin-datalabels.js"></script>
 
         <!-- jquery -->
-        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+        <script src="<?=base_url()?>js/jquery-3.6.3.min.js"></script>
 
     </head>
     <body>

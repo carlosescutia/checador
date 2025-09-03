@@ -10,6 +10,8 @@ class Justificantes_masivos extends CI_Controller {
         $this->load->model('bitacora_model');
         $this->load->model('parametros_sistema_model');
         $this->load->model('justificantes_masivos_model');
+        $this->load->model('empleados_model');
+        $this->load->model('justificante_masivo_empleados_model');
     }
 
     public function get_userdata()
@@ -46,6 +48,8 @@ class Justificantes_masivos extends CI_Controller {
             $data += $this->get_system_params();
 
             $data['justificante_masivo'] = $this->justificantes_masivos_model->get_justificante_masivo($cve_justificante_masivo);
+            $data['empleados'] = $this->empleados_model->get_empleados_activos();
+            $data['empleados_justificante_masivo'] = explode(',', $this->justificante_masivo_empleados_model->get_empleados_justificante_masivo($cve_justificante_masivo)['cve_empleado']);
 
             $this->load->view('templates/admheader', $data);
             $this->load->view('justificantes_masivos/detalle', $data);
@@ -61,6 +65,7 @@ class Justificantes_masivos extends CI_Controller {
             $data = [];
             $data += $this->get_userdata();
             $data += $this->get_system_params();
+            $data['empleados'] = $this->empleados_model->get_empleados_activos();
 
             $this->load->view('templates/admheader', $data);
             $this->load->view('justificantes_masivos/nuevo', $data);
@@ -79,6 +84,15 @@ class Justificantes_masivos extends CI_Controller {
             $justificante_masivo = $this->input->post();
             if ($justificante_masivo) {
 
+                // lista de empleados
+                $emps = [];
+                foreach ($justificante_masivo as $key => $value) {
+                    if (substr($key, 0, 3) == 'chk') {
+                        $emps[] = substr($key, 3, 99);
+                    }
+                }
+                $num_emps = sizeof($emps);
+
                 if ($cve_justificante_masivo) {
                     $accion = 'modificó';
                 } else {
@@ -88,30 +102,43 @@ class Justificantes_masivos extends CI_Controller {
                 // guardado
                 $data = array(
                     'fecha' => $justificante_masivo['fecha'],
+                    'fech_fin' => empty($justificante_masivo['fech_fin']) ? null : $justificante_masivo['fech_fin'],
                     'desc_justificante_masivo' => $justificante_masivo['desc_justificante_masivo'],
                     'tipo' => $justificante_masivo['tipo'],
                 );
                 $cve_justificante_masivo = $this->justificantes_masivos_model->guardar($data, $cve_justificante_masivo);
-                
+
+                // borrado de empleados del justificante masivo
+                $this->justificante_masivo_empleados_model->eliminar($cve_justificante_masivo);
+
+                // guardado de empleados del justificante masivo
+                foreach ($emps as $emps_item) {
+                    $data = [
+                        "cve_justificante_masivo" => $cve_justificante_masivo,
+                        "cve_empleado" => $emps_item
+                    ];
+                    $this->justificante_masivo_empleados_model->guardar($data);
+                }
+
                 // registro en bitacora
-				$separador = ' -> ';
-				$usuario = $this->session->userdata('usuario');
-				$nom_usuario = $this->session->userdata('nom_usuario');
-				$nom_organizacion = $this->session->userdata('nom_organizacion');
-				$entidad = 'justificantes_masivos';
+                $separador = ' -> ';
+                $usuario = $this->session->userdata('usuario');
+                $nom_usuario = $this->session->userdata('nom_usuario');
+                $nom_organizacion = $this->session->userdata('nom_organizacion');
+                $entidad = 'justificantes_masivos';
                 $valor = $cve_justificante_masivo . " " . $justificante_masivo['fecha'];
-				$data = array(
-					'fecha' => date("Y-m-d"),
-					'hora' => date("H:i"),
-					'origen' => $_SERVER['REMOTE_ADDR'],
-					'usuario' => $usuario,
-					'nom_usuario' => $nom_usuario,
-					'nom_organizacion' => $nom_organizacion,
-					'accion' => $accion,
-					'entidad' => $entidad,
-					'valor' => $valor
-				);
-				$this->bitacora_model->guardar($data);
+                $data = array(
+                    'fecha' => date("Y-m-d"),
+                    'hora' => date("H:i"),
+                    'origen' => $_SERVER['REMOTE_ADDR'],
+                    'usuario' => $usuario,
+                    'nom_usuario' => $nom_usuario,
+                    'nom_organizacion' => $nom_organizacion,
+                    'accion' => $accion,
+                    'entidad' => $entidad,
+                    'valor' => $valor
+                );
+                $this->bitacora_model->guardar($data);
 
             }
 

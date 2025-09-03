@@ -16,16 +16,26 @@
         </div>
 
         <div class="col-md-12">
-            <div class="form-group row">
-                <label for="fecha" class="col-sm-2 col-form-label">Fecha</label>
-                <div class="col-sm-4">
-                    <input type="date" class="form-control" name="fecha" id="fecha" value="<?=$justificante['fecha'] ?>">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="detalle" class="col-sm-2 col-form-label">Detalle</label>
-                <div class="col-sm-4">
-                    <textarea class="form-control" name="detalle" id="detalle" rows="4"><?=$justificante['detalle'] ?></textarea>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group row">
+                        <label for="fecha" class="col-sm-3 col-form-label">Fecha inicial</label>
+                        <div class="col-sm-4">
+                            <input type="date" class="form-control" name="fecha" id="fecha" value="<?=$justificante['fecha'] ?>">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="fech_fin" class="col-sm-3 col-form-label">Fecha final</label>
+                        <div class="col-sm-4">
+                            <input type="date" class="form-control" name="fech_fin" id="fech_fin" value="<?=$justificante['fech_fin'] ?>">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="detalle" class="col-sm-3 col-form-label">Detalle</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" name="detalle" id="detalle" rows="4"><?=$justificante['detalle'] ?></textarea>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

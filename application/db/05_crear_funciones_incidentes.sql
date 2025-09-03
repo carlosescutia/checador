@@ -26,13 +26,13 @@ begin
     fech_ini := anio || '-' || mes || '-01';
     fech_fin := end_of_month(fech_ini);
     return query
-	select
-		dt::date
-	from
-		generate_series(fech_ini, fech_fin, interval '1' day) as t(dt)
-	where
-		extract(dow from dt) between 1 and 5 
-	;
+    select
+        dt::date
+    from
+        generate_series(fech_ini, fech_fin, interval '1' day) as t(dt)
+    where
+        extract(dow from dt) between 1 and 5 
+    ;
 end; 
 $$ language plpgsql strict immutable;
 
@@ -185,38 +185,45 @@ returns table(cve_empleado int, fecha date, hora_entrada time, hora_salida time,
 $$
 begin
     return query
-	select
-		i.*
-		, (select * from
-			(
-				select 'di' where di.cve_dia_inhabil is not null
-				union
-				select 'jm' where jm.cve_justificante_masivo is not null
-				union
-				select 'ji' where j.cve_justificante is not null
-				union
-				select 'hc' where i.cve_incidente is not null  and di.cve_dia_inhabil is null and jm.cve_justificante_masivo is null and j.cve_justificante is null and i.hora_salida - i.hora_entrada >= '8:00'
-			) as tj
-		limit 1 ) as tipo_justificante
-		, (select * from
-			(
-				select di.cve_dia_inhabil where di.cve_dia_inhabil is not null
-				union
-				select jm.cve_justificante_masivo where jm.cve_justificante_masivo is not null
-				union
-				select j.cve_justificante where j.cve_justificante is not null
-				union
-				select 99 where i.cve_incidente is not null  and di.cve_dia_inhabil is null and jm.cve_justificante_masivo is null and j.cve_justificante is null and i.hora_salida - i.hora_entrada >= '8:00'
-			) as cj
-		limit 1 ) as cve_justificante
-	from
-		incidentes(mes, anio, tolerancia_retardo, tolerancia_asistencia) i
+    select
+        i.*
+        , (select valor from
+            (
+                select 1 as orden, 'di' as valor where di.cve_dia_inhabil is not null
+                union
+                select 2 as orden, 'jm' as valor where jm.cve_justificante_masivo is not null 
+                union
+                select 3 as orden, 'jm' as valor where jm2.cve_justificante_masivo is not null 
+                union
+                select 4 as orden, 'ji' as valor where j.cve_justificante is not null
+                union
+                select 5 as orden, 'hc' as valor where i.cve_incidente is not null and di.cve_dia_inhabil is null and jm.cve_justificante_masivo is null and j.cve_justificante is null and i.hora_salida - i.hora_entrada >= '8:00'
+                order by orden
+            ) as tj
+        limit 1 ) as tipo_justificante
+        , (select valor from
+            (
+                select 1 as orden, di.cve_dia_inhabil as valor where di.cve_dia_inhabil is not null
+                union
+                select 2 as orden, jm.cve_justificante_masivo as valor where jm.cve_justificante_masivo is not null 
+                union
+                select 3 as orden, jm2.cve_justificante_masivo as valor where jm2.cve_justificante_masivo is not null 
+                union
+                select 4 as orden, j.cve_justificante as valor where j.cve_justificante is not null
+                union
+                select 5 as orden, 99 as valor where i.cve_incidente is not null and di.cve_dia_inhabil is null and jm.cve_justificante_masivo is null and j.cve_justificante is null and i.hora_salida - i.hora_entrada >= '8:00'
+                order by orden
+            ) as cj
+        limit 1 ) as cve_justificante
+    from
+        incidentes(mes, anio, tolerancia_retardo, tolerancia_asistencia) i
         left join dias_inhabiles di on di.fecha = i.fecha
-        left join justificantes_masivos jm on jm.fecha = i.fecha
-        left join justificantes j on j.fecha = i.fecha and j.cve_empleado = i.cve_empleado
-	order by
-		i.fecha
-	;
+        left join justificantes_masivos jm on i.fecha between jm.fecha and coalesce(jm.fech_fin, jm.fecha) and jm.cve_justificante_masivo not in (select distinct cve_justificante_masivo from justificante_masivo_empleados)
+        left join justificantes_masivos jm2 on i.fecha between jm2.fecha and coalesce(jm2.fech_fin, jm2.fecha) and i.cve_empleado in (select jme.cve_empleado from justificante_masivo_empleados jme where jme.cve_justificante_masivo = jm2.cve_justificante_masivo)
+        left join justificantes j on i.fecha between j.fecha and coalesce(j.fech_fin, j.fecha) and j.cve_empleado = i.cve_empleado
+    order by
+        i.fecha
+    ;
 
 end;
 $$ language plpgsql strict immutable;

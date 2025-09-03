@@ -3,7 +3,7 @@
     <form method="post" action="<?= $url_actual ?>">
         <div class="row">
             <div class="col">
-                <select class="form-select form-select-sm" id="mes" name="mes">
+                <select class="form-select form-select-sm d-print-none" id="mes" name="mes">
                     <option value="1" <?= $mes == '1' ? 'selected' : '' ?>>Enero</option>
                     <option value="2" <?= $mes == '2' ? 'selected' : '' ?>>Febrero</option>
                     <option value="3" <?= $mes == '3' ? 'selected' : '' ?>>Marzo</option>
@@ -19,7 +19,7 @@
                 </select>
             </div>
             <div class="col">
-                <input type="number" class="form-control form-control-sm" id="anio" name="anio" min="2022" max="2030" value="<?=$anio?>">
+                <input type="number" class="form-control form-control-sm d-print-none" id="anio" name="anio" min="2022" max="2030" value="<?=$anio?>">
             </div>
             <div class="col">
                 <button class="btn btn-success btn-sm d-print-none">Cambiar</button>

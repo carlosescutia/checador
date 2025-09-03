@@ -10,6 +10,13 @@
     src: local('Proxima Nova Bold'), local('Proxima Nova Bold'), url("fonts/Proxima-Nova-Bold.otf") format('opentype');
 }
 
+/*
+ * Debug: borde rojo en todos los elementos
+* {
+    border: 1px solid red;
+}
+*/
+
 html {
     position: relative;
     min-height:100%;

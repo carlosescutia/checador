@@ -1,6 +1,6 @@
         </main>
 
-        <div class="footer_margin">
+        <div class="footer_margin d-print-none">
         </div>
 
         <footer class="footer d-print-none">

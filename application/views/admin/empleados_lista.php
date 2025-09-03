@@ -17,38 +17,38 @@
     <div class="card mt-0 mb-3 border-0">
         <div class="card-body">
             <div class="row">
-                <div class="col-sm-6 offset-sm-1">
-                    <div class="row">
-                        <div class="col-sm-2 align-self-center">
-                            <p class="small"><strong>Clave</strong></p>
-                        </div>
-                        <div class="col-sm-5 align-self-center">
-                            <p class="small"><strong>Nombre</strong></p>
-                        </div>
-                        <div class="col-sm-2 align-self-center">
-                            <p class="small"><strong>Horario</strong></p>
-                        </div>
-                        <div class="col-sm-2 align-self-center">
-                            <p class="small text-center"><strong>Incidentes</strong></p>
-                        </div>
-                    </div>
-                    <?php foreach ($incidentes_empleados as $incidentes_empleados_item) { ?>
-                    <div class="row alternate-color">
-                        <div class="col-sm-2 align-self-center">
-                            <p><?= $incidentes_empleados_item['cod_empleado'] ?></p>
-                        </div>
-                        <div class="col-sm-5 align-self-center">
-                            <p><a href="<?=base_url()?>admin/empleados_detalle/<?=$incidentes_empleados_item['cve_empleado']?>"><?= $incidentes_empleados_item['nom_empleado'] ?></a></p>
-                        </div>
-                        <div class="col-sm-2 align-self-center">
-                            <p><?= $incidentes_empleados_item['desc_horario'] ?></p>
-                        </div>
-                        <div class="col-sm-2 align-self-center">
-                            <p class="text-center"><?= $incidentes_empleados_item['num_incidentes'] ?></p>
-                        </div>
-                    </div>
-                    <?php } ?>
+
+                <div class="col-sm-7">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Clave</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Horario</th>
+                                <th scope="col">Incidentes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($incidentes_empleados as $incidentes_empleados_item) { ?>
+                            <tr>
+                                <td>
+                                    <?= $incidentes_empleados_item['cod_empleado'] ?>
+                                </td>
+                                <td>
+                                    <a href="<?=base_url()?>admin/empleados_detalle/<?=$incidentes_empleados_item['cve_empleado']?>"><?= $incidentes_empleados_item['nom_empleado'] ?></a>
+                                </td>
+                                <td>
+                                    <?= $incidentes_empleados_item['desc_horario'] ?>
+                                </td>
+                                <td class="text-center">
+                                    <?= $incidentes_empleados_item['num_incidentes'] ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
+
                 <div class="col-sm-4 offset-sm-1">
                     <?php include "dias_inhabiles.php" ?>
                     <?php include "justificantes_masivos.php" ?>
