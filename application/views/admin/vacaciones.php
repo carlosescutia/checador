@@ -14,9 +14,18 @@
             </thead>
             <tbody>
             <?php foreach ($vacaciones_empleado as $vacaciones_empleado_item) { ?>
+                <?php
+                    $url = '#';
+                    if ($vacaciones_empleado_item['tipo_justificante'] == 'ji'):
+                        $url = base_url() . 'justificantes/detalle_vacacion/' . $vacaciones_empleado_item['cve_justificante'] ;
+                    endif;
+                    if ($vacaciones_empleado_item['tipo_justificante'] == 'jm'):
+                        $url = base_url() . 'justificantes_masivos/detalle/' . $vacaciones_empleado_item['cve_justificante'] ;
+                    endif;
+                ?>
                 <tr>
                     <td>
-                        <a href="<?=base_url()?>justificantes/detalle_vacacion/<?=$vacaciones_empleado_item['cve_justificante']?>"><?= date('d/m/y', strtotime($vacaciones_empleado_item['fecha'])) ?></a>
+                        <a href="<?= $url ?>"><?= date('d/m/y', strtotime($vacaciones_empleado_item['fecha'])) ?></a>
                     </td>
                     <td>
                         <?= is_null($vacaciones_empleado_item['fech_fin']) ? "": date('d/m/y', strtotime($vacaciones_empleado_item['fech_fin'])) ?>
@@ -29,8 +38,8 @@
                         $item_eliminar = date('d/m/Y', strtotime($vacaciones_empleado_item['fecha'])) . ' - ' . $vacaciones_empleado_item['tipo'];
                         $url = base_url() . "justificantes/eliminar/". $vacaciones_empleado_item['cve_justificante']; 
                         ?>
-                        <?php if (in_array('99', $accesos_sistema_rol)) { ?>
-                        <a href="#dlg_borrar" class="d-print-none" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i></a>
+                        <?php if ( in_array('99', $accesos_sistema_rol) and ($vacaciones_empleado_item['tipo_justificante'] == 'ji') ) { ?>
+                            <a href="#dlg_borrar" class="d-print-none" data-bs-toggle="modal" onclick="pass_data('<?=$item_eliminar?>', '<?=$url?>')" ><i class="bi bi-x-circle boton-eliminar" ></i></a>
                         <?php } ?>
                     </td>
                 </tr>
