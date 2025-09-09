@@ -95,6 +95,7 @@
                     </table>
                 </div>
                 <div class="col-sm-4">
+                    <?php include "horas.php" ?>
                     <?php include "vacaciones.php" ?>
                     <?php include "justificantes.php" ?>
                 </div>

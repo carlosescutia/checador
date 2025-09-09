@@ -234,6 +234,8 @@ class Admin extends CI_Controller {
             $data['incidentes_empleado'] = $this->incidentes_model->get_incidentes_empleado($cve_empleado, $mes, $anio, $tolerancia_retardo, $tolerancia_asistencia);
             $data['vacaciones_empleado'] = $this->justificantes_model->get_vacaciones_empleado($anio, $cve_empleado);
             $data['justificantes_empleado'] = $this->justificantes_model->get_justificantes_empleado($mes, $anio, $cve_empleado);
+            $data['horas_a_cubrir_empleado'] = $this->empleados_model->get_horas_a_cubrir_empleado($mes, $anio, $cve_empleado);
+            $data['horas_trabajadas_empleado'] = $this->empleados_model->get_horas_trabajadas_empleado($mes, $anio, $cve_empleado);
 
             $this->load->view('templates/admheader', $data);
             $this->load->view('templates/dlg_borrar');

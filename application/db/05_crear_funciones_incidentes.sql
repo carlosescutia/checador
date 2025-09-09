@@ -212,13 +212,19 @@ begin
             (
                 select 1 as orden, 'di' as valor where di.cve_dia_inhabil is not null
                 union
-                select 2 as orden, 'jm' as valor where jm.cve_justificante_masivo is not null 
+                select 2 as orden, 'jm' as valor where jm.cve_justificante_masivo is not null and jm.tipo in ('D','V')
                 union
-                select 3 as orden, 'jm' as valor where jm2.cve_justificante_masivo is not null 
+                select 3 as orden, 'jm' as valor where jm2.cve_justificante_masivo is not null and jm2.tipo in ('D','V')
                 union
-                select 4 as orden, 'ji' as valor where j.cve_justificante is not null
+                select 4 as orden, 'ji' as valor where j.cve_justificante is not null and j.tipo in ('D','V')
                 union
-                select 5 as orden, 'hc' as valor where i.cve_incidente is not null and di.cve_dia_inhabil is null and jm.cve_justificante_masivo is null and j.cve_justificante is null and i.hora_salida - i.hora_entrada >= '8:00'
+                select 5 as orden, 'jm' as valor where jm.cve_justificante_masivo is not null and jm.tipo not in ('D','V')
+                union
+                select 6 as orden, 'jm' as valor where jm2.cve_justificante_masivo is not null and jm2.tipo not in ('D','V')
+                union
+                select 7 as orden, 'ji' as valor where j.cve_justificante is not null and j.tipo not in ('D','V')
+                union
+                select 8 as orden, 'hc' as valor where i.cve_incidente is not null and di.cve_dia_inhabil is null and jm.cve_justificante_masivo is null and j.cve_justificante is null and i.hora_salida - i.hora_entrada >= '8:00'
                 order by orden
             ) as tj
         limit 1 ) as tipo_justificante
@@ -226,13 +232,19 @@ begin
             (
                 select 1 as orden, di.cve_dia_inhabil as valor where di.cve_dia_inhabil is not null
                 union
-                select 2 as orden, jm.cve_justificante_masivo as valor where jm.cve_justificante_masivo is not null 
+                select 2 as orden, jm.cve_justificante_masivo as valor where jm.cve_justificante_masivo is not null and jm.tipo in ('D','V')
                 union
-                select 3 as orden, jm2.cve_justificante_masivo as valor where jm2.cve_justificante_masivo is not null 
+                select 3 as orden, jm2.cve_justificante_masivo as valor where jm2.cve_justificante_masivo is not null and jm2.tipo in ('D','V')
                 union
-                select 4 as orden, j.cve_justificante as valor where j.cve_justificante is not null
+                select 4 as orden, j.cve_justificante as valor where j.cve_justificante is not null and j.tipo in ('D','V')
                 union
-                select 5 as orden, 99 as valor where i.cve_incidente is not null and di.cve_dia_inhabil is null and jm.cve_justificante_masivo is null and j.cve_justificante is null and i.hora_salida - i.hora_entrada >= '8:00'
+                select 5 as orden, jm.cve_justificante_masivo as valor where jm.cve_justificante_masivo is not null and jm.tipo not in ('D','V')
+                union
+                select 6 as orden, jm2.cve_justificante_masivo as valor where jm2.cve_justificante_masivo is not null and jm2.tipo not in ('D','V')
+                union
+                select 7 as orden, j.cve_justificante as valor where j.cve_justificante is not null and j.tipo not in ('D','V')
+                union
+                select 8 as orden, 99 as valor where i.cve_incidente is not null and di.cve_dia_inhabil is null and jm.cve_justificante_masivo is null and j.cve_justificante is null and i.hora_salida - i.hora_entrada >= '8:00'
                 order by orden
             ) as cj
         limit 1 ) as cve_justificante
