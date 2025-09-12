@@ -31,6 +31,23 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="id_periodo" class="col-sm-3 col-form-label">Período</label>
+                        <div class="col-sm-4">
+                            <select class="form-select" name="id_periodo" id="id_periodo">
+                                <option value=""></option>
+                                <?php foreach ($periodos as $periodos_item): ?>
+                                    <option value="<?= $periodos_item['id_periodo'] ?>"><?=$periodos_item['nom_periodo']?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="anio" class="col-sm-3 col-form-label">Año</label>
+                        <div class="col-sm-3">
+                            <input type="number" class="form-control" name="anio" id="anio">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="detalle" class="col-sm-3 col-form-label">Detalle</label>
                         <div class="col-sm-8">
                             <textarea class="form-control" name="detalle" id="detalle" rows="4"></textarea>
@@ -42,6 +59,8 @@
 
         <input type="hidden" name="cve_empleado" id="cve_empleado" value="<?=$cve_empleado?>">
         <input type="hidden" name="tipo" id="tipo" value="V">
+        <input type="hidden" name="cve_eventualidad" id="cve_eventualidad" value="">
+        <input type="hidden" name="id_justificante_periodo" id="id_justificante_periodo" value="">
 
     </form>
 

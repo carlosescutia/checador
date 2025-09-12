@@ -9,26 +9,32 @@ class Justificantes_model extends CI_Model {
     {
         $sql = ""
             ."select  "
-            ."j.cve_justificante, j.cve_empleado, j.fecha, j.tipo, 'ji' as tipo_justificante, j.detalle, j.fech_fin, dias_habiles_rango(j.fecha, coalesce(j.fech_fin, j.fecha)) as dias "
+            ."j.cve_justificante, j.cve_empleado, j.fecha, j.tipo, 'ji' as tipo_justificante, j.detalle, j.fech_fin, dias_habiles_rango(j.fecha, coalesce(j.fech_fin, j.fecha)) as dias, jp.anio, p.nom_periodo "
             ."from  "
             ."justificantes j "
+            ."left join justificante_periodo jp on jp.cve_justificante = j.cve_justificante "
+            ."left join periodos p on p.id_periodo = jp.id_periodo "
             ."where  "
             ."extract(year from j.fecha) = ? "
             ."and j.cve_empleado = ?  "
             ."and j.tipo = 'V'  "
             ."union "
             ."select  "
-            ."jm.cve_justificante_masivo, ? as cve_empleado, jm.fecha, jm.tipo, 'jm' as tipo_justificante, jm.desc_justificante_masivo as detalle, jm.fech_fin, dias_habiles_rango(jm.fecha, coalesce(jm.fech_fin, jm.fecha)) as dias "
+            ."jm.cve_justificante_masivo, ? as cve_empleado, jm.fecha, jm.tipo, 'jm' as tipo_justificante, jm.desc_justificante_masivo as detalle, jm.fech_fin, dias_habiles_rango(jm.fecha, coalesce(jm.fech_fin, jm.fecha)) as dias, jmp.anio, p.nom_periodo "
             ."from  "
             ."justificantes_masivos jm "
+            ."left join justificante_masivo_periodo jmp on jmp.cve_justificante_masivo = jm.cve_justificante_masivo "
+            ."left join periodos p on p.id_periodo = jmp.id_periodo "
             ."where  "
             ."? between extract(year from jm.fecha) and extract(year from jm.fech_fin) and jm.cve_justificante_masivo not in (select distinct cve_justificante_masivo from justificante_masivo_empleados) "
             ."and jm.tipo = 'V'  "
             ."union "
             ."select  "
-            ."jm2.cve_justificante_masivo, ? as cve_empleado, jm2.fecha, jm2.tipo, 'jm' as tipo_justificante, jm2.desc_justificante_masivo as detalle, jm2.fech_fin, dias_habiles_rango(jm2.fecha, coalesce(jm2.fech_fin, jm2.fecha)) as dias "
+            ."jm2.cve_justificante_masivo, ? as cve_empleado, jm2.fecha, jm2.tipo, 'jm' as tipo_justificante, jm2.desc_justificante_masivo as detalle, jm2.fech_fin, dias_habiles_rango(jm2.fecha, coalesce(jm2.fech_fin, jm2.fecha)) as dias, jmp.anio, p.nom_periodo "
             ."from  "
             ."justificantes_masivos jm2 "
+            ."left join justificante_masivo_periodo jmp on jmp.cve_justificante_masivo = jm2.cve_justificante_masivo "
+            ."left join periodos p on p.id_periodo = jmp.id_periodo "
             ."where  "
             ."? between extract(year from jm2.fecha) and extract(year from jm2.fech_fin) and ? in (select jme.cve_empleado from justificante_masivo_empleados jme where jme.cve_justificante_masivo = jm2.cve_justificante_masivo) "
             ."and jm2.tipo = 'V'  "
@@ -63,7 +69,15 @@ class Justificantes_model extends CI_Model {
 
     public function get_justificante($cve_justificante)
     {
-        $sql = 'select * from justificantes where cve_justificante = ?';
+        $sql = ""
+            ."select "
+            ."j.*, jp.id_justificante_periodo, jp.id_periodo, jp.anio "
+            ."from "
+            ."justificantes j "
+            ."left join justificante_periodo jp on jp.cve_justificante = j.cve_justificante "
+            ."where "
+            ."j.cve_justificante = ? "
+            ."";
         $query = $this->db->query($sql, array($cve_justificante));
         return $query->row_array();
     }

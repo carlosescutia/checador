@@ -1,18 +1,18 @@
 <?php
 class Reportes extends CI_Controller {
 
-	public function __construct()
-	{
-		parent::__construct();
-		$this->load->model('usuarios_model');
-		$this->load->model('accesos_sistema_model');
-		$this->load->model('opciones_sistema_model');
-		$this->load->model('bitacora_model');
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model('usuarios_model');
+        $this->load->model('accesos_sistema_model');
+        $this->load->model('opciones_sistema_model');
+        $this->load->model('bitacora_model');
         $this->load->model('parametros_sistema_model');
 
-		$this->load->model('empleados_model');
+        $this->load->model('empleados_model');
         $this->load->model('incidentes_model');
-	}
+    }
 
     public function get_userdata()
     {
@@ -40,52 +40,52 @@ class Reportes extends CI_Controller {
         return $data;
     }
 
-	public function index()
-	{
-		if ($this->session->userdata('logueado')) {
+    public function index()
+    {
+        if ($this->session->userdata('logueado')) {
             $data = [];
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-			$this->load->view('templates/admheader', $data);
-			$this->load->view('reportes/index', $data);
-			$this->load->view('templates/footer', $data);
-		} else {
-			redirect('admin/login');
-		}
-	}
+            $this->load->view('templates/admheader', $data);
+            $this->load->view('reportes/index', $data);
+            $this->load->view('templates/footer', $data);
+        } else {
+            redirect('admin/login');
+        }
+    }
 
-	public function listado_bitacora_01()
-	{
-		if ($this->session->userdata('logueado')) {
+    public function listado_bitacora_01()
+    {
+        if ($this->session->userdata('logueado')) {
             $data = [];
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-			$filtros = $this->input->post();
-			if ($filtros) {
-				$accion = $filtros['accion'];
-				$entidad = $filtros['entidad'];
-			} else {
-				$accion = '';
-				$entidad = '';
-			}
+            $filtros = $this->input->post();
+            if ($filtros) {
+                $accion = $filtros['accion'];
+                $entidad = $filtros['entidad'];
+            } else {
+                $accion = '';
+                $entidad = '';
+            }
 
-			$data['accion'] = $accion;
-			$data['entidad'] = $entidad;
+            $data['accion'] = $accion;
+            $data['entidad'] = $entidad;
             $cve_rol = $data['cve_rol'];
 
             $nom_organizacion = $this->session->userdata['nom_organizacion'];
             $usuario = $this->session->userdata['usuario'];
-			$data['bitacora'] = $this->bitacora_model->get_bitacora($usuario, $nom_organizacion, $cve_rol, $accion, $entidad);
+            $data['bitacora'] = $this->bitacora_model->get_bitacora($usuario, $nom_organizacion, $cve_rol, $accion, $entidad);
 
-			$this->load->view('templates/admheader', $data);
-			$this->load->view('reportes/listado_bitacora_01', $data);
-			$this->load->view('templates/footer', $data);
-		} else {
-			redirect('admin/login');
-		}
-	}
+            $this->load->view('templates/admheader', $data);
+            $this->load->view('reportes/listado_bitacora_01', $data);
+            $this->load->view('templates/footer', $data);
+        } else {
+            redirect('admin/login');
+        }
+    }
 
     public function listado_bitacora_01_csv()
     {
@@ -149,9 +149,9 @@ class Reportes extends CI_Controller {
         }
     }
 
-	public function listado_asistencia_01()
-	{
-		if ($this->session->userdata('logueado')) {
+    public function listado_asistencia_01()
+    {
+        if ($this->session->userdata('logueado')) {
             $data = [];
             $data += $this->get_userdata();
             $data += $this->get_system_params();
@@ -178,7 +178,7 @@ class Reportes extends CI_Controller {
                 } else {
                     $anio = date('Y');
                 }
-			}
+            }
             $data['mes'] = $mes;
             $data['anio'] = $anio;
             $tolerancia_retardo = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_retardo');
@@ -187,12 +187,12 @@ class Reportes extends CI_Controller {
             $data['empleados'] = $this->empleados_model->get_empleados_activos();
             $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados($mes, $anio, $tolerancia_retardo, $tolerancia_asistencia);
 
-			$this->load->view('templates/admheader', $data);
-			$this->load->view('reportes/listado_asistencia_01', $data);
-			$this->load->view('templates/footer', $data);
-		} else {
-			redirect('admin/login');
-		}
-	}
+            $this->load->view('templates/admheader', $data);
+            $this->load->view('reportes/listado_asistencia_01', $data);
+            $this->load->view('templates/footer', $data);
+        } else {
+            redirect('admin/login');
+        }
+    }
 
 }

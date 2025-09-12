@@ -25,10 +25,10 @@
                         <thead>
                             <tr>
                                 <th scope="col-2">Fecha</th>
-                                <th scope="col-2">Entrada</th>
-                                <th scope="col-2">Salida</th>
-                                <th scope="col-3">Incidente</th>
-                                <th scope="col-3">Justificante</th>
+                                <th scope="col-1">Entrada</th>
+                                <th scope="col-1">Salida</th>
+                                <th scope="col-2">Incidente</th>
+                                <th scope="col-6">Justificante</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -37,21 +37,21 @@
                                 <td class="col-2">
                                     <?= get_nom_dia($incidentes_empleado_item['fecha']) ?>&nbsp;<?= date('d/m/y', strtotime($incidentes_empleado_item['fecha'])) ?>
                                 </td>
-                                <td class="col-2">
+                                <td class="col-1">
                                     <?php if ( ! in_array($incidentes_empleado_item['cve_incidente'], array('6', '7')) ): ?>
                                         <?php if ( in_array($incidentes_empleado_item['cve_incidente'], array('1','2','3','4','9')) ): ?> <u> <?php endif ?>
                                         <?= is_null($incidentes_empleado_item['hora_entrada']) ? '' : date('H:i', strtotime($incidentes_empleado_item['hora_entrada'])) ?>
                                         <?php if ( in_array($incidentes_empleado_item['cve_incidente'], array('1','2','3','4','9')) ): ?> </u> <?php endif ?>
                                     <?php endif ?>
                                 </td>
-                                <td class="col-2">
+                                <td class="col-1">
                                     <?php if ( ! in_array($incidentes_empleado_item['cve_incidente'], array('8', '9', '10')) ): ?>
                                         <?php if ( in_array($incidentes_empleado_item['cve_incidente'], array('1','3','5','6')) ): ?> <u> <?php endif ?>
                                         <?= is_null($incidentes_empleado_item['hora_salida']) ? '' : date('H:i', strtotime($incidentes_empleado_item['hora_salida'])) ?>
                                         <?php if ( in_array($incidentes_empleado_item['cve_incidente'], array('1','3','5','6')) ): ?> </u> <?php endif ?>
                                     <?php endif ?>
                                 </td>
-                                <td class="col-3">
+                                <td class="col-2">
                                     <?php if ( ! $incidentes_empleado_item['cve_justificante'] ): ?>
                                         <?php if (in_array('99', $accesos_sistema_rol)): ?>
                                             <a href="<?=base_url()?>justificantes/nuevo_justificante/<?=$incidentes_empleado_item['cve_empleado']?>/<?=$incidentes_empleado_item['fecha']?>"><?= $incidentes_empleado_item['desc_incidente'] ?></a>
@@ -74,7 +74,7 @@
                                             break;
                                         case "ji": 
                                             $url = base_url() . "justificantes/detalle_justificante/" . $incidentes_empleado_item['cve_justificante'] ;
-                                            $texto = $incidentes_empleado_item['desc_corta_justificante'];
+                                            $texto = $incidentes_empleado_item['desc_corta_justificante'] . ': '. $incidentes_empleado_item['desc_justificante'];
                                             break;
                                         case "hc": 
                                             $url = '#';
@@ -82,7 +82,7 @@
                                             break;
                                     endswitch
                                 ?>
-                                <td class="col-3">
+                                <td class="col-6">
                                     <?php if ($incidentes_empleado_item['tipo_justificante'] == 'hc'): ?>
                                         <?=$texto?>
                                     <?php else:?>

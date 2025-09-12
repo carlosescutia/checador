@@ -31,7 +31,10 @@
                         <?= is_null($vacaciones_empleado_item['fech_fin']) ? "": date('d/m/y', strtotime($vacaciones_empleado_item['fech_fin'])) ?>
                     </td>
                     <td>
-                        <?= $vacaciones_empleado_item['detalle'] ?> (<?= $vacaciones_empleado_item['dias'] ?>d)
+                        <?php
+                            $detalle = $vacaciones_empleado_item['nom_periodo'] . ' ' . $vacaciones_empleado_item['anio'] . ' ' . $vacaciones_empleado_item['detalle'];
+                        ?>
+                        <?= $detalle ?> (<?= $vacaciones_empleado_item['dias'] ?>d)
                     </td>
                     <td>
                         <?php 

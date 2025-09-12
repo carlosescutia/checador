@@ -26,7 +26,7 @@
                         <?= $justificantes_masivos_item['tipo'] ?>
                     </td>
                     <td>
-                        <?= $justificantes_masivos_item['desc_justificante_masivo'] ?>
+                        <?= $justificantes_masivos_item['nom_periodo'] . ' ' . $justificantes_masivos_item['anio'] . ' ' . $justificantes_masivos_item['desc_justificante_masivo'] ?>
                     </td>
                     <td>
                         <?php 

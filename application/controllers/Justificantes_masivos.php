@@ -12,6 +12,8 @@ class Justificantes_masivos extends CI_Controller {
         $this->load->model('justificantes_masivos_model');
         $this->load->model('empleados_model');
         $this->load->model('justificante_masivo_empleados_model');
+        $this->load->model('periodos_model');
+        $this->load->model('justificante_masivo_periodo_model');
     }
 
     public function get_userdata()
@@ -50,6 +52,7 @@ class Justificantes_masivos extends CI_Controller {
             $data['justificante_masivo'] = $this->justificantes_masivos_model->get_justificante_masivo($cve_justificante_masivo);
             $data['empleados'] = $this->empleados_model->get_empleados_activos();
             $data['empleados_justificante_masivo'] = explode(',', $this->justificante_masivo_empleados_model->get_empleados_justificante_masivo($cve_justificante_masivo)['cve_empleado']);
+            $data['periodos'] = $this->periodos_model->get_periodos();
 
             $this->load->view('templates/admheader', $data);
             $this->load->view('justificantes_masivos/detalle', $data);
@@ -65,7 +68,9 @@ class Justificantes_masivos extends CI_Controller {
             $data = [];
             $data += $this->get_userdata();
             $data += $this->get_system_params();
+
             $data['empleados'] = $this->empleados_model->get_empleados_activos();
+            $data['periodos'] = $this->periodos_model->get_periodos();
 
             $this->load->view('templates/admheader', $data);
             $this->load->view('justificantes_masivos/nuevo', $data);
@@ -118,6 +123,20 @@ class Justificantes_masivos extends CI_Controller {
                         "cve_empleado" => $emps_item
                     ];
                     $this->justificante_masivo_empleados_model->guardar($data);
+                }
+
+                // guardado de periodo
+                $id_justificante_masivo_periodo = $justificante_masivo['id_justificante_masivo_periodo'];
+                $tipo = $justificante_masivo['tipo'];
+                $id_periodo = $justificante_masivo['id_periodo'];
+                $anio = $justificante_masivo['anio'];
+                if ($tipo == 'V' and $id_periodo and $anio) {
+                    $data = [
+                        "cve_justificante_masivo" => $cve_justificante_masivo,
+                        "id_periodo" => $justificante_masivo['id_periodo'],
+                        "anio" => $anio,
+                    ];
+                    $this->justificante_masivo_periodo_model->guardar($data, $id_justificante_masivo_periodo);
                 }
 
                 // registro en bitacora

@@ -34,12 +34,29 @@
                     <div class="form-group row">
                         <label for="tipo" class="col-sm-3 col-form-label">Tipo</label>
                         <div class="col-sm-4">
-                            <select class="form-select" name="tipo" id="tipo">
+                            <select class="form-select" name="tipo" id="tipo" onchange="cambia_estado_periodos()">
                                 <option value="D" >Día</option>
                                 <option value="E" >Entrada</option>
                                 <option value="S" >Salida</option>
                                 <option value="V" >Vacaciones</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group row controles-periodo">
+                        <label for="id_periodo" class="col-sm-3 col-form-label">Período</label>
+                        <div class="col-sm-4">
+                            <select class="form-select" name="id_periodo" id="id_periodo">
+                                <option value=""></option>
+                                <?php foreach ($periodos as $periodos_item): ?>
+                                    <option value="<?= $periodos_item['id_periodo'] ?>"><?=$periodos_item['nom_periodo']?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row controles-periodo">
+                        <label for="anio" class="col-sm-3 col-form-label">Año</label>
+                        <div class="col-sm-3">
+                            <input type="number" class="form-control" name="anio" id="anio">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -99,7 +116,17 @@
 
 </main>
 <script>
+    function cambia_estado_periodos() {
+        if ( ["V"].includes($("#tipo").val()) ) {
+            $(".controles-periodo").removeClass("d-none");
+        } else {
+            $(".controles-periodo").addClass("d-none");
+        }
+    }
+
     $(document).ready(function() {
+
+        cambia_estado_periodos();
 
         $('#btn_todos').click(function() {
             $('input').prop('checked', true);

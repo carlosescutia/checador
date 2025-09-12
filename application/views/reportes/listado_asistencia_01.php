@@ -91,20 +91,9 @@
                                                 <td>
                                                     <?php 
                                                         $texto = '' ;
-                                                        switch ($incidentes_empleados_item['tipo_justificante']): 
-                                                            case "di": 
-                                                                $texto = $incidentes_empleados_item['desc_corta_justificante'] . ': '. $incidentes_empleados_item['desc_justificante'];
-                                                                break;
-                                                            case "jm": 
-                                                                $texto = $incidentes_empleados_item['desc_corta_justificante'] . ': '. $incidentes_empleados_item['desc_justificante'];
-                                                                break;
-                                                            case "ji": 
-                                                                $texto = $incidentes_empleados_item['desc_corta_justificante'];
-                                                                break;
-                                                            case "hc": 
-                                                                $texto = $incidentes_empleados_item['desc_corta_justificante'] . ': '. $incidentes_empleados_item['desc_justificante'];
-                                                                break;
-                                                        endswitch
+                                                        if ($incidentes_empleados_item['tipo_justificante']): 
+                                                            $texto = $incidentes_empleados_item['desc_corta_justificante'] . ': '. $incidentes_empleados_item['desc_justificante'];
+                                                        endif
                                                     ?>
                                                     <?=$texto?>
                                                 </td>

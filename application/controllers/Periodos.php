@@ -1,5 +1,5 @@
 <?php
-class Justificantes extends CI_Controller {
+class Periodos extends CI_Controller {
 
     public function __construct()
     {
@@ -9,12 +9,7 @@ class Justificantes extends CI_Controller {
         $this->load->model('opciones_sistema_model');
         $this->load->model('bitacora_model');
         $this->load->model('parametros_sistema_model');
-        $this->load->model('justificantes_model');
-        $this->load->model('eventualidades_model');
-        $this->load->model('empleados_model');
         $this->load->model('periodos_model');
-        $this->load->model('justificante_masivo_periodo_model');
-        $this->load->model('justificante_periodo_model');
     }
 
     public function get_userdata()
@@ -43,87 +38,66 @@ class Justificantes extends CI_Controller {
         return $data;
     }
 
-    public function detalle_justificante($cve_justificante)
+    public function index()
     {
         if ($this->session->userdata('logueado')) {
             $data = [];
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            $data['justificante'] = $this->justificantes_model->get_justificante($cve_justificante);
-            $data['eventualidades'] = $this->eventualidades_model->get_eventualidades();
-
-            $this->load->view('templates/admheader', $data);
-            $this->load->view('justificantes/detalle_justificante', $data);
-            $this->load->view('templates/footer', $data);
-        } else {
-            redirect('admin/login');
-        }
-    }
-
-    public function detalle_vacacion($cve_justificante)
-    {
-        if ($this->session->userdata('logueado')) {
-            $data = [];
-            $data += $this->get_userdata();
-            $data += $this->get_system_params();
-
-            $data['justificante'] = $this->justificantes_model->get_justificante($cve_justificante);
             $data['periodos'] = $this->periodos_model->get_periodos();
 
             $this->load->view('templates/admheader', $data);
-            $this->load->view('justificantes/detalle_vacacion', $data);
+            $this->load->view('templates/dlg_borrar');
+            $this->load->view('catalogos/periodos/lista', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');
         }
     }
 
-    public function nueva_vacacion($cve_empleado)
+    public function detalle($id_periodo)
     {
         if ($this->session->userdata('logueado')) {
             $data = [];
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            $data['cve_empleado'] = $cve_empleado ;
-            $data['periodos'] = $this->periodos_model->get_periodos();
+            $data['periodo'] = $this->periodos_model->get_periodo($id_periodo);
 
             $this->load->view('templates/admheader', $data);
-            $this->load->view('justificantes/nueva_vacacion', $data);
+            $this->load->view('catalogos/periodos/detalle', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');
         }
     }
 
-    public function nuevo_justificante($cve_empleado, $fecha=null)
+    public function nuevo()
     {
         if ($this->session->userdata('logueado')) {
             $data = [];
             $data += $this->get_userdata();
             $data += $this->get_system_params();
 
-            $data['cve_empleado'] = $cve_empleado ;
-            $data['fecha'] = $fecha ;
-            $data['eventualidades'] = $this->eventualidades_model->get_eventualidades();
-            $data['empleados'] = $this->empleados_model->get_empleados_activos();
-
             $this->load->view('templates/admheader', $data);
-            $this->load->view('justificantes/nuevo_justificante', $data);
+            $this->load->view('catalogos/periodos/nuevo', $data);
             $this->load->view('templates/footer', $data);
         } else {
             redirect('admin/login');
         }
     }
 
-    public function guardar($cve_justificante=null)
+    public function guardar($id_periodo=null)
     {
         if ($this->session->userdata('logueado')) {
 
-            $justificante = $this->input->post();
-            if ($justificante) {
-                if ($cve_justificante) {
+            $nuevo_periodo = is_null($id_periodo);
+
+            $periodo = $this->input->post();
+            if ($periodo) {
+
+                if ($id_periodo) {
                     $accion = 'modificó';
                 } else {
                     $accion = 'agregó';
@@ -131,36 +105,18 @@ class Justificantes extends CI_Controller {
 
                 // guardado
                 $data = array(
-                    'cve_empleado' => $justificante['cve_empleado'],
-                    'fecha' => $justificante['fecha'],
-                    'fech_fin' => empty($justificante['fech_fin']) ? null : $justificante['fech_fin'],
-                    'tipo' => $justificante['tipo'],
-                    'detalle' => $justificante['detalle'],
-                    'cve_eventualidad' => empty($justificante['cve_eventualidad']) ? null : $justificante['cve_eventualidad'],
+                    'nom_periodo' => $periodo['nom_periodo'],
+                    'orden' => $periodo['orden'],
                 );
-                $cve_justificante = $this->justificantes_model->guardar($data, $cve_justificante);
-
-                // guardado de periodo
-                $id_justificante_periodo = $justificante['id_justificante_periodo'];
-                $tipo = $justificante['tipo'];
-                $id_periodo = $justificante['id_periodo'];
-                $anio = $justificante['anio'];
-                if ($tipo == 'V' and $id_periodo and $anio) {
-                    $data = [
-                        "cve_justificante" => $cve_justificante,
-                        "id_periodo" => $justificante['id_periodo'],
-                        "anio" => $anio,
-                    ];
-                    $this->justificante_periodo_model->guardar($data, $id_justificante_periodo);
-                }
+                $id_periodo = $this->periodos_model->guardar($data, $id_periodo);
 
                 // registro en bitacora
                 $separador = ' -> ';
                 $usuario = $this->session->userdata('usuario');
                 $nom_usuario = $this->session->userdata('nom_usuario');
                 $nom_organizacion = $this->session->userdata('nom_organizacion');
-                $entidad = 'justificantes';
-                $valor = $cve_justificante . " " . $justificante['fecha'] . " " . $justificante['tipo'] ;
+                $entidad = 'periodos';
+                $valor = $id_periodo . " " . $periodo['nom_periodo'];
                 $data = array(
                     'fecha' => date("Y-m-d"),
                     'hora' => date("H:i"),
@@ -173,28 +129,29 @@ class Justificantes extends CI_Controller {
                     'valor' => $valor
                 );
                 $this->bitacora_model->guardar($data);
+
             }
 
-            redirect('admin/empleados_detalle/' . $justificante['cve_empleado']);
+            redirect('periodos');
+
         } else {
             redirect('admin/login');
         }
     }
 
-    public function eliminar($cve_justificante)
+    public function eliminar($id_periodo)
     {
         if ($this->session->userdata('logueado')) {
 
             // registro en bitacora
-            $justificante = $this->justificantes_model->get_justificante($cve_justificante);
+            $periodo = $this->periodos_model->get_periodo($id_periodo);
             $separador = ' -> ';
             $usuario = $this->session->userdata('usuario');
             $nom_usuario = $this->session->userdata('nom_usuario');
             $nom_organizacion = $this->session->userdata('nom_organizacion');
             $accion = 'eliminó';
-            $entidad = 'justificantes';
-            $valor = $justificante['cve_empleado'] . " " . $justificante['fecha'] . " " . $justificante['tipo'] ;
-
+            $entidad = 'periodos';
+            $valor = $id_periodo . " " . $periodo['nom_periodo'];
             $data = array(
                 'fecha' => date("Y-m-d"),
                 'hora' => date("H:i"),
@@ -209,9 +166,9 @@ class Justificantes extends CI_Controller {
             $this->bitacora_model->guardar($data);
 
             // eliminado
-            $this->justificantes_model->eliminar($cve_justificante);
+            $this->periodos_model->eliminar($id_periodo);
 
-            redirect('admin/empleados_detalle/' . $justificante['cve_empleado']);
+            redirect('periodos');
 
         } else {
             redirect('admin/login');
@@ -219,4 +176,3 @@ class Justificantes extends CI_Controller {
     }
 
 }
-

@@ -21,9 +21,14 @@
                         <?php include "horarios_especiales/boton.php"; ?>
                     </div>
                 <?php } ?>
-                <?php if (in_array('503', $accesos_sistema_rol)) { ?>
+                <?php if (in_array('505', $accesos_sistema_rol)) { ?>
                     <div class="col-md-4">
-                        <?php include "parametros_sistema/boton.php"; ?>
+                        <?php include "eventualidades/boton.php"; ?>
+                    </div>
+                <?php } ?>
+                <?php if (in_array('507', $accesos_sistema_rol)) { ?>
+                    <div class="col-md-4">
+                        <?php include "periodos/boton.php"; ?>
                     </div>
                 <?php } ?>
                 <?php if (in_array('504', $accesos_sistema_rol)) { ?>
@@ -31,9 +36,9 @@
                         <?php include "organizaciones/boton.php"; ?>
                     </div>
                 <?php } ?>
-                <?php if (in_array('505', $accesos_sistema_rol)) { ?>
+                <?php if (in_array('503', $accesos_sistema_rol)) { ?>
                     <div class="col-md-4">
-                        <?php include "eventualidades/boton.php"; ?>
+                        <?php include "parametros_sistema/boton.php"; ?>
                     </div>
                 <?php } ?>
             </div>
