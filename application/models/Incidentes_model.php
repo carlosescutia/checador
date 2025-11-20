@@ -87,6 +87,39 @@ class Incidentes_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function get_incidentes_empleados_periodo($fech_ini, $fech_fin, $tolerancia_retardo, $tolerancia_asistencia)
+    {
+        $sql = ""
+            ."select  "
+            ."j.cve_empleado, j.fecha, j.hora_entrada, j.hora_salida, j.cve_incidente, ti.desc_incidente, j.tipo_justificante, j.cve_justificante "
+            .",( "
+            ."select 'dia inhabil' from dias_inhabiles di where j.tipo_justificante = 'di' and j.cve_justificante = di.cve_dia_inhabil "
+            ."union "
+            ."select case when tipo = 'D' then 'dia masivo justificado' when tipo = 'E' then 'entrada masiva justificada' when tipo = 'S' then 'salida masiva justificada' when tipo = 'V' then 'vacaciones' end from justificantes_masivos jm where j.tipo_justificante = 'jm' and j.cve_justificante = jm.cve_justificante_masivo "
+            ."union "
+            ."select case when tipo = 'V' then 'vacaciones' when tipo = 'S' then 'salida justificada' when tipo = 'E' then 'entrada justificada' when tipo = 'D' then 'dia justificado' end from justificantes ji where j.tipo_justificante = 'ji' and j.cve_justificante = ji.cve_justificante "
+            ."union "
+            ."select 'fuera de horario' where j.tipo_justificante = 'hc' "
+            .") as desc_corta_justificante "
+            .",( "
+            ."select di.desc_dia_inhabil from dias_inhabiles di where j.tipo_justificante = 'di' and j.cve_justificante = di.cve_dia_inhabil "
+            ."union "
+            ."select coalesce(p.nom_periodo,'') || ' ' || coalesce(jmp.anio::text,'') || ' ' || jm.desc_justificante_masivo from justificantes_masivos jm left join justificante_masivo_periodo jmp on jmp.cve_justificante_masivo = jm.cve_justificante_masivo left join periodos p on p.id_periodo = jmp.id_periodo where j.tipo_justificante = 'jm' and j.cve_justificante = jm.cve_justificante_masivo "
+            ."union "
+            ."select coalesce(p.nom_periodo,'') || ' ' || coalesce(jp.anio::text,'') || ' ' || ji.detalle from justificantes ji left join justificante_periodo jp on jp.cve_justificante = j.cve_justificante left join periodos p on p.id_periodo = jp.id_periodo where j.tipo_justificante = 'ji' and j.cve_justificante = ji.cve_justificante "
+            ."union "
+            ."select 'Cumple horas de trabajo' where j.tipo_justificante = 'hc' "
+            .") as desc_justificante "
+            ."from  "
+            ."justificacion_periodo(?,?,?,?) j  "
+            ."left join tipo_incidentes ti on ti.cve_incidente = j.cve_incidente "
+            ."order by "
+            ."j.fecha "
+            ;
+        $query = $this->db->query($sql, array($fech_ini, $fech_fin, $tolerancia_retardo, $tolerancia_asistencia));
+        return $query->result_array();
+    }
+
     public function get_lista_incidentes_fechas($mes, $anio, $tolerancia_retardo, $tolerancia_asistencia)
     {
         $sql = 'select j.fecha, count(j.cve_incidente) as num_incidentes from justificacion(?,?,?,?) j where j.cve_incidente is not null and j.tipo_justificante is null group by j.fecha order by j.fecha';

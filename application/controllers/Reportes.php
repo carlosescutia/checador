@@ -195,4 +195,55 @@ class Reportes extends CI_Controller {
         }
     }
 
+    public function listado_incidentes_01()
+    {
+        if ($this->session->userdata('logueado')) {
+            $data = [];
+            $data += $this->get_userdata();
+            $data += $this->get_system_params();
+
+            $filtros = $this->input->post();
+            if ($filtros) {
+
+                $fech_ini = $filtros['fech_ini'];
+                $fech_fin = $filtros['fech_fin'];
+                $filtros_proyectos = array(
+                    'fech_ini' => $fech_ini,
+                    'fech_fin' => $fech_fin,
+                );
+                $this->session->set_userdata($filtros_proyectos);
+
+            } else {
+                if ($this->session->userdata('fech_ini')) {
+                    $fech_ini = $this->session->userdata('fech_ini');
+                } else {
+                    $fech_ini = date("Y-m-d");
+                }
+                if ($this->session->userdata('fech_fin')) {
+                    $fech_fin = $this->session->userdata('fech_fin');
+                } else {
+                    $fech_fin = date("Y-m-d");
+                }
+            }
+            $data['fech_ini'] = $fech_ini;
+            $data['fech_fin'] = $fech_fin;
+            $tolerancia_retardo = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_retardo');
+            $tolerancia_asistencia = $this->parametros_sistema_model->get_parametro_sistema_nom('tolerancia_asistencia');
+
+            $data['empleados'] = $this->empleados_model->get_empleados_activos();
+            $data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados_periodo($fech_ini, $fech_fin, $tolerancia_retardo, $tolerancia_asistencia);
+            $mes = date('m');
+            $anio = date('Y');
+            $data['mes'] = $mes;
+            $data['anio'] = $anio;
+            //$data['incidentes_empleados'] = $this->incidentes_model->get_incidentes_empleados($mes, $anio, $tolerancia_retardo, $tolerancia_asistencia);
+
+            $this->load->view('templates/admheader', $data);
+            $this->load->view('reportes/listado_incidentes_01', $data);
+            $this->load->view('templates/footer', $data);
+        } else {
+            redirect('admin/login');
+        }
+    }
+
 }
