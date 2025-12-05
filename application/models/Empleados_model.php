@@ -36,8 +36,10 @@ class Empleados_model extends CI_Model {
     }
 
     public function get_horas_a_cubrir_empleado($mes, $anio, $cve_empleado) {
+        $fech_ini = $anio . "-" . $mes . "-01";
+        $fech_fin = date("Y-m-t", strtotime($fech_ini));
         $sql = ""
-            ."select count(*) * 8 as horas_a_cubrir_empleado from dias_habiles(?,?)  "
+            ."select count(*) * 8 as horas_a_cubrir_empleado from dias_habiles_periodo(?,?) "
             ."where  "
             ."fecha not in (select fecha from dias_inhabiles) "
             ."and fecha not in "
@@ -49,15 +51,17 @@ class Empleados_model extends CI_Model {
             ."select (generate_series(fecha, coalesce(fech_fin, fecha), interval '1' day)) as fecha_jus from justificantes where tipo in ('D','V') and cve_empleado = ? "
             .") "
             ."";
-        $query = $this->db->query($sql, array($mes, $anio, $cve_empleado, $cve_empleado));
+        $query = $this->db->query($sql, array($fech_ini, $fech_fin, $cve_empleado, $cve_empleado));
         return $query->row_array()['horas_a_cubrir_empleado'] ?? null ;
     }
 
     public function get_horas_trabajadas_empleado($mes, $anio, $cve_empleado) {
+        $fech_ini = $anio . "-" . $mes . "-01";
+        $fech_fin = date("Y-m-t", strtotime($fech_ini));
         $sql = ""
-            ."select extract(hour from sum(hora_salida - hora_entrada)) as horas_trabajadas_empleado from asistencias(?,?) where cve_empleado = ? "
+            ."select extract(hour from sum(hora_salida - hora_entrada)) as horas_trabajadas_empleado from asistencias_periodo(?,?) where cve_empleado = ? "
             ."";
-        $query = $this->db->query($sql, array($mes, $anio, $cve_empleado));
+        $query = $this->db->query($sql, array($fech_ini, $fech_fin, $cve_empleado));
         return $query->row_array()['horas_trabajadas_empleado'] ?? null ;
     }
 
