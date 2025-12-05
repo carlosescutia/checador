@@ -316,6 +316,8 @@ begin
                     (j.tipo = 'E' and i.cve_incidente in (2,4,7) )
                     or
                     (j.tipo = 'S' and i.cve_incidente in (5,10) )
+                    or
+                    (j.tipo in ('D','V') and i.cve_incidente = 11 )
                 )
             and j.cve_empleado = i.cve_empleado
 
